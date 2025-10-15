@@ -1,8 +1,11 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-    baseURL: "https://mern-ecommerce-be-production.up.railway.app/api",
-    withCredentials:true, // send cookies to the server
-})
+  baseURL:
+    import.meta.env.MODE === "development"
+      ? "http://localhost:5000/api"
+      : "https://mern-ecommerce-be-production.up.railway.app/api",
+  withCredentials: true,
+});
 
 export default axiosInstance;
