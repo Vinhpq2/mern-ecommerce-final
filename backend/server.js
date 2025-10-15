@@ -23,7 +23,7 @@ app.use(express.json({limit:"10mb"})); // allow json data to be sent in the requ
 app.use(cookieParser());
 app.use(cors({
   origin: [
-    "https://mern-ecommerce-wmpx.vercel.app", // domain FE
+    "https://mern-ecommerce-gwvh.vercel.app/", // domain FE
     "http://localhost:5173"                   // domain dev local (nếu cần)
   ],
   credentials: true, // nếu bạn dùng cookie-based auth

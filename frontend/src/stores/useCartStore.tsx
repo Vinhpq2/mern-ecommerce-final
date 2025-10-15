@@ -68,6 +68,8 @@ export const useCartStore = create<CartStore>((set, get) => ({
             const discount = subtotal * (coupon?.discountPercentage /100);
             total = subtotal - discount;
         }
+		if(total>20000)
+			get().getMyCoupon();
         set({subtotal,total});
     },
 
