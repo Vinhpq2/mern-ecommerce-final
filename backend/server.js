@@ -20,7 +20,7 @@ app.use(cors({
     "http://localhost:5173"                   // domain dev local (nếu cần)
   ],
   credentials: true,
-  method:["GET","POST","PUT","DELETE","PATCH"],
+  // method:["GET","POST","PUT","DELETE","PATCH"],
 }));
 // const PORT 
 const PORT = process.env.PORT || 5000;
