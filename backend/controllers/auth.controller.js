@@ -31,7 +31,7 @@ const setCookies = (res,accessToken,refreshToken)=>{
     maxAge:7*24*60*60*1000, // 7days
 })
 
-console.log("cookies",req.cookies) // Debug: Log the cookies being set
+
 }
 export const signup = async(req,res)=>{
     const {email,password,name} = req.body
