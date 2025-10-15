@@ -6,10 +6,12 @@ const generateToken = (userId)=>{
     const accessToken = jwt.sign({userId},process.env.ACCESS_TOKEN_SECRET,{
         expiresIn:"15m"
     });
+    console.log("UserID for token generation:", userId); // Debug: Log the userId
 
     const refreshToken = jwt.sign({userId},process.env.REFRESH_TOKEN_SECRET,{
         expiresIn:"7d"
     });
+    console.log("Generated Tokens: 123", { accessToken, refreshToken }); // Debug: Log the generated tokens
     return {accessToken,refreshToken}
 
 }
@@ -31,6 +33,8 @@ const setCookies = (res,accessToken,refreshToken)=>{
     sameSite:"strict", // chặn csrf cross-site request forgery
     maxAge:7*24*60*60*1000, // 7days
 })
+console.log("Cookies set:", { accessToken, refreshToken });
+console.log("cookies",req.cookies) // Debug: Log the cookies being set
 }
 export const signup = async(req,res)=>{
     const {email,password,name} = req.body

@@ -21,13 +21,7 @@ const PORT = process.env.PORT || 5000;
 const __dirname = path.resolve();
 app.use(express.json({limit:"10mb"})); // allow json data to be sent in the request body
 app.use(cookieParser());
-app.use(cors({
-  origin: [
-    "https://mern-ecommerce-gwvh.vercel.app", // domain FE
-    "http://localhost:5173"                   // domain dev local (nếu cần)
-  ],
-  credentials: true, // nếu bạn dùng cookie-based auth
-}));
+
  // allow json data to be sent in the request body
 app.use("/api/auth", authRouters);
 app.use("/api/products",productRouters);
@@ -36,13 +30,20 @@ app.use("/api/coupons",couponRouters);
 app.use("/api/payments",paymentRouters);
 app.use("/api/analytics",analyticsRoutes);
 
-// if (process.env.NODE_ENV === "production") {
-// 	app.use(express.static(path.join(__dirname, "/frontend/dist")));
+if (process.env.NODE_ENV === "production") {
+	app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
-// 	app.use((req, res) => {
-// 		res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-// 	});
-// }
+	app.use((req, res) => {
+		res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+	});
+}
+app.use(cors({
+  origin: [
+    "https://mern-ecommerce-gwvh.vercel.app", // domain FE
+    "http://localhost:5173"                   // domain dev local (nếu cần)
+  ],
+  credentials: true, // nếu bạn dùng cookie-based auth
+}));
 
 app.listen(PORT,()=> {
 	console.log('aaa');
