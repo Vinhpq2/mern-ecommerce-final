@@ -21,7 +21,6 @@ app.use(cors({
   ],
   credentials: true,
   method:["GET","POST","PUT","DELETE","PATCH"],
-  allowedHeaders: ["Content-Type", "Authorization"],// nếu bạn dùng cookie-based auth
 }));
 // const PORT 
 const PORT = process.env.PORT || 5000;
@@ -32,7 +31,8 @@ app.use(cookieParser());
 
  // allow json data to be sent in the request body
  app.get("/", (req, res) => {
-  res.send("Express is working!");
+  console.log("Request nhận được:", req.method, req.url);
+  res.send("✅ Express is working!");
 });
 
 app.use("/api/auth", authRouters);

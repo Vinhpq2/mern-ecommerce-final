@@ -46,7 +46,7 @@ try{
 
    // authenticate 
    const {accessToken,refreshToken} = await generateToken(user._id)
-   console.log("Generated Tokens:", { accessToken, refreshToken }); // Debug: Log the generated tokens
+
    await StoreRefreshToken(user._id,refreshToken)
 
    setCookies(res,accessToken,refreshToken)
@@ -71,33 +71,30 @@ catch(error){
 
  }
 
-    export const login = async(req,res)=>{
-        try{
-            const {email,password} = req.body;
-            const user = await User.findOne({email})
-            if(user && (await user.comparePassword(password))){
-                const {accessToken, refreshToken} = await generateToken(user._id);
-                console.log("Generated Tokens: login", { accessToken, refreshToken }); // Debug: Log the generated tokens
-                await StoreRefreshToken(user._id,refreshToken)
-                setCookies(res,accessToken,refreshToken);
-                
-                res.status(200).json({
-                    _id:user._id,
-                    name:user.name,
-                    email:user.email,
-                    role:user.role,
-                });
-            }
-            else{
-                res.status(401).json({message:"Email hoặc mật khẩu không hợp lệ"});
-            }
-        }
-        catch(error){
-            console.log("Error in login controller",error.message);
-            res.status(500).json({message:error.message});
-            
-        }
-    }
+export const login = async (req, res) => {
+	try {
+		const { email, password } = req.body;
+		const user = await User.findOne({ email });
+
+		if (user && (await user.comparePassword(password))) {
+			const { accessToken, refreshToken } = generateToken(user._id);
+			await StoreRefreshToken(user._id, refreshToken);
+			setCookies(res, accessToken, refreshToken);
+
+			res.json({
+				_id: user._id,
+				name: user.name,
+				email: user.email,
+				role: user.role,
+			});
+		} else {
+			res.status(400).json({ message: "Invalid email or password" });
+		}
+	} catch (error) {
+		console.log("Error in login controller", error.message);
+		res.status(500).json({ message: error.message });
+	}
+};
 
 export const logout = async(req,res)=>{
     try{
@@ -116,7 +113,6 @@ export const logout = async(req,res)=>{
     catch(error){
         res.status(500).json({message:"Server error",error1:error.message})
     }
-    res.send("logout Route called")
 }
 
 // this will refress the access token
