@@ -45,6 +45,7 @@ try{
 
    // authenticate 
    const {accessToken,refreshToken} = await generateToken(user._id)
+   console.log("Generated Tokens:", { accessToken, refreshToken }); // Debug: Log the generated tokens
    await StoreRefreshToken(user._id,refreshToken)
 
    setCookies(res,accessToken,refreshToken)
