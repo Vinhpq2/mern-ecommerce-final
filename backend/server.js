@@ -9,6 +9,7 @@ import paymentRouters from "./routes/payment.route.js";
 import analyticsRoutes from "./routes/analytics.route.js";
 import cookieParser from 'cookie-parser';
 import { connectDB } from "./lib/db.js";
+import cors from "cors";
 
 dotenv.config()
 
@@ -20,6 +21,13 @@ const PORT = process.env.PORT || 5000;
 const __dirname = path.resolve();
 app.use(express.json({limit:"10mb"})); // allow json data to be sent in the request body
 app.use(cookieParser());
+app.use(cors({
+  origin: [
+    "https://mern-ecommerce-wmpx.vercel.app", // domain FE
+    "http://localhost:5173"                   // domain dev local (nếu cần)
+  ],
+  credentials: true, // nếu bạn dùng cookie-based auth
+}));
  // allow json data to be sent in the request body
 app.use("/api/auth", authRouters);
 app.use("/api/products",productRouters);
