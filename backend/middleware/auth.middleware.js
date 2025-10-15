@@ -18,8 +18,7 @@ export const protectRoute = async (req, res, next) => {
         }
 
         req.user = user;
-        console.log("User authenticated:", user); // Debug: Log authenticated user
-        next();
+        console.log("User authenticated: protectRoute", req.cookie); // Debug: Log authenticated user
 
             }catch(error){
                 if(error.name === "TokenExpiredError")
@@ -27,6 +26,7 @@ export const protectRoute = async (req, res, next) => {
             
             throw error;
             }
+        next();
         }
     catch(error){
         console.error("Error in protectRoute middleware;",error.message);

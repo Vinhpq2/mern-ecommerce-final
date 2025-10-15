@@ -14,7 +14,15 @@ import cors from "cors";
 dotenv.config()
 
 const app = express();
-
+app.use(cors({
+  origin: [
+    "https://mern-ecommerce-sage-five.vercel.app", // domain FE
+    "http://localhost:5173"                   // domain dev local (nếu cần)
+  ],
+  credentials: true,
+  method:["GET","POST","PUT","DELETE","PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"],// nếu bạn dùng cookie-based auth
+}));
 // const PORT 
 const PORT = process.env.PORT || 5000;
 
@@ -37,13 +45,7 @@ if (process.env.NODE_ENV === "production") {
 		res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
 	});
 }
-app.use(cors({
-  origin: [
-    "https://mern-ecommerce-gwvh.vercel.app", // domain FE
-    "http://localhost:5173"                   // domain dev local (nếu cần)
-  ],
-  credentials: true, // nếu bạn dùng cookie-based auth
-}));
+
 
 app.listen(PORT,()=> {
 	console.log('aaa');
