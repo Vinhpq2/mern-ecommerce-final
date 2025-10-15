@@ -2,9 +2,11 @@ import jwt from 'jsonwebtoken';
 import User from '../models/user.model.js';
 
 export const protectRoute = async (req, res, next) => {
+    console.log("ProtectRoute middleware invoked");
+    console.log("Cookies:", req.cookies); // Debug: Log all cookies
     try{
         const accessToken = req.cookies.accessToken;
-
+        console.log("Access Token:", accessToken); // Debug: Log the access token
         if(!accessToken){
             return res.status(401).json({message:"Unauthorized - No access token provided"})
         }
@@ -17,7 +19,7 @@ export const protectRoute = async (req, res, next) => {
         }
 
         req.user = user;
-
+        console.log("User authenticated:", user); // Debug: Log authenticated user
         next();
 
             }catch(error){
