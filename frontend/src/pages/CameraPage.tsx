@@ -122,7 +122,7 @@ export default function Camera() {
     zindex: 1999999999,
     lang: { show: true, set: "en" }
   },
-  (res, location) {
+  (res, location) =>{
     console.log("Result:", res);
     console.log("Location:", location);
      window.location.href = "/success";
