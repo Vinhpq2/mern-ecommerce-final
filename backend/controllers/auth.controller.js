@@ -21,13 +21,13 @@ const setCookies = (res,accessToken,refreshToken)=>{
     res.cookie("accessToken",accessToken,{
         httpOnly:true, // chặn xss , cross site scripting 
         secure:process.env.NODE_ENV === "production",
-        sameSite:"strict", // chặn csrf cross-site request forgery
+        sameSite:process.env.NODE_ENV === "production" ? "none" : "strict", // chặn csrf cross-site request forgery
         maxAge:15*60*1000, // 15m
 })
     res.cookie("refreshToken",refreshToken,{
     httpOnly:true, // chặn xss , cross site scripting 
     secure:process.env.NODE_ENV === "production",
-    sameSite:"strict", // chặn csrf cross-site request forgery (strict)
+    sameSite:process.env.NODE_ENV === "production" ? "none" : "strict",  // chặn csrf cross-site request forgery (strict)
     maxAge:7*24*60*60*1000, // 7days
 })
 
