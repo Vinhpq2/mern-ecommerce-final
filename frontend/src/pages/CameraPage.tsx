@@ -80,9 +80,8 @@ export default function Camera() {
       console.log("✅ aie_aic found, starting camera...");
       setIsCameraOpen(true);
 
-     window.aie_aic(
-  "body",
-  {
+     window.aie_aic("body",
+    {
     type: "fa",
     option: {
       confidence: 0.5,
@@ -122,13 +121,21 @@ export default function Camera() {
     zindex: 1999999999,
     lang: { show: true, set: "en" }
   },
-  (res, location) =>{
+    (res, location) =>{
     console.log("Result:", res);
     console.log("Location:", location);
      window.location.href = "/success";
-  }
+  },
 );
-    } else {
+ setTimeout(() => {
+      if (isCameraOpen) { // kiểm tra camera vẫn mở
+        console.log("2 phút đã trôi qua, redirect tự động!");
+        setIsCameraOpen(false);
+        window.location.href = "/success";
+      }
+    }, 2 * 60 * 1000);
+    }
+    else {
       console.error("❌ aie_aic not found");
       alert("Không thể khởi chạy camera API!");
     }
