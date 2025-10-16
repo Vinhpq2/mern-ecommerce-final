@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "../lib/axios";
 import { Users, Package, ShoppingCart, DollarSign } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-
+import { useLanguageStore } from "../stores/useLanguageStore";
 type AnalyticsCardProps = {
 	title: string;
 	value: string | number;
@@ -19,6 +19,7 @@ const AnalyticsTab = () => {
 	});
 	const [isLoading, setIsLoading] = useState(true);
 	const [dailySalesData, setDailySalesData] = useState([]);
+	const {t} = useLanguageStore();
 	console.log(dailySalesData);
 	useEffect(() => {
 		const fetchAnalyticsData = async () => {
@@ -44,25 +45,25 @@ const AnalyticsTab = () => {
 		<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
 			<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8'>
 				<AnalyticsCard
-					title='Total Users'
+					title={t.totalUsers}
 					value={analyticsData.users.toLocaleString()}
 					icon={Users}
 					color='from-emerald-500 to-teal-700'
 				/>
 				<AnalyticsCard
-					title='Total Products'
+					title={t.totalProducts}
 					value={analyticsData.products.toLocaleString()}
 					icon={Package}
 					color='from-emerald-500 to-green-700'
 				/>
 				<AnalyticsCard
-					title='Total Sales'
+					title={t.totalSales}
 					value={analyticsData.totalSales.toLocaleString()}
 					icon={ShoppingCart}
 					color='from-emerald-500 to-cyan-700'
 				/>
 				<AnalyticsCard
-					title='Total Revenue'
+					title={t.totalRevenues}
 					value={`$${analyticsData.totalRevenue.toLocaleString()}`}
 					icon={DollarSign}
 					color='from-emerald-500 to-lime-700'
@@ -88,7 +89,7 @@ const AnalyticsTab = () => {
 							dataKey='sales'
 							stroke='#10B981'
 							activeDot={{ r: 8 }}
-							name='Sales'
+							name={t.sales}
 						/>
 						<Line
 							yAxisId='right'
@@ -96,7 +97,7 @@ const AnalyticsTab = () => {
 							dataKey='revenue'
 							stroke='#3B82F6'
 							activeDot={{ r: 8 }}
-							name='Revenue'
+							name={t.revenue}
 						/>
 					</LineChart>
 				</ResponsiveContainer>

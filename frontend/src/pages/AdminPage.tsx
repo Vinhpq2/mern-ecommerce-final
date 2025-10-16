@@ -5,6 +5,7 @@ import CreateProductForm from "../components/CreateProductForm";
 import ProductsList from "../components/ProductsList";
 import AnalyticsTab from "../components/AnalyticsTab";
 import { useProductStore } from "../stores/useProductStore";
+import { useLanguageStore } from "../stores/useLanguageStore";
 const tabs = [
     {id:"create",label:"Tạo sản phẩm",icon:PlusCircle},
     {id:"products",label:"Sản phẩm",icon:ShoppingBasket},
@@ -13,7 +14,7 @@ const tabs = [
 const AdminPage = () => {
     const [activeTab,setActiveTab] = useState("create");
     const {fetchAllProducts} = useProductStore();
-
+    const {t} = useLanguageStore();
     useEffect(() =>{
         fetchAllProducts();
     },[fetchAllProducts]);
@@ -25,7 +26,7 @@ const AdminPage = () => {
                 initial={{opacity:0,y:-20}}
                 animate={{opacity:1,y:0}}
                 transition={{duration:0.8}}>
-                    Admin Dashboard
+                   {t.adminDashboard}
                 </motion.h1>
                 <div className="flex justify-center mb-8">
                     {tabs.map((tab)=>(

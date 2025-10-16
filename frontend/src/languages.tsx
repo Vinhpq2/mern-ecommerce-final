@@ -37,6 +37,7 @@ export const languages: { [lang: string]: {
     signupFailed:string;
     wrongPassword:string;
     invalid:string;
+    adminDashboard:string;
     processing:string;
     orderSummary:string;
     originalPrice:string;
@@ -103,6 +104,7 @@ export const languages: { [lang: string]: {
     signupFailed:"Signup failed",
     wrongPassword:"Passwords do not match",
     invalid:"Invalid email or password",
+    adminDashboard:"Admin Dashboard",
     processing:"Processing...",
     orderSummary:"Order Summary",
     originalPrice:"Original Price",
@@ -169,6 +171,7 @@ export const languages: { [lang: string]: {
     signupFailed:"Đăng ký thất bại",
     wrongPassword:"Mật khẩu không khớp",
     invalid:"Email hoặc mật khẩu không đúng",
+    adminDashboard:"Bảng điều khiển quản trị",
     processing:"Đang xử lý...",
     orderSummary:"Tóm tắt đơn hàng",
     originalPrice:"Giá gốc",
