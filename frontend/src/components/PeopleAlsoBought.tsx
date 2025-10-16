@@ -4,7 +4,7 @@ import axios from "../lib/axios";
 import toast from "react-hot-toast";
 import LoadingSpinner from "./LoadingSpinner";
 import type { Product } from "../types/product";
-import { useLanguageStore } from "../stores/useLanguagesStore";
+import { useLanguageStore } from "../stores/useLanguageStore";
 const PeopleAlsoBought = () => {
 	const [recommendations, setRecommendations] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);

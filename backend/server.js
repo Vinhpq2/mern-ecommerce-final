@@ -7,6 +7,7 @@ import cartRouters from "./routes/cart.route.js";
 import couponRouters from "./routes/coupon.route.js";
 import paymentRouters from "./routes/payment.route.js";
 import analyticsRoutes from "./routes/analytics.route.js";
+import videoRouters from "./routes/video.router.js";
 import cookieParser from 'cookie-parser';
 import { connectDB } from "./lib/db.js";
 import cors from "cors";
@@ -35,13 +36,14 @@ app.use(cookieParser());
   console.log("Request nhận được:", req.method, req.url);
   res.send("✅ Express is working!");
 });
-
+app.use("/api/video",videoRouters);
 app.use("/api/auth", authRouters);
 app.use("/api/products",productRouters);
 app.use("/api/cart",cartRouters);
 app.use("/api/coupons",couponRouters);
 app.use("/api/payments",paymentRouters);
 app.use("/api/analytics",analyticsRoutes);
+
 
 // if (process.env.NODE_ENV === "production") {
 // 	app.use(express.static(path.join(__dirname, "/frontend/dist")));

@@ -49,6 +49,20 @@ export const languages: { [lang: string]: {
     purchaseCancelTitle:string;
     purchaseCancelContact:string;
     returnHome:string;
+    liveStreamTitle:string;
+    liveStreamTime:string;
+    startRecord:string;
+    stopRecord:string;
+    micOn:string;
+    micOff:string;
+    previewVideo:string;
+    titleVideo:string;
+    missingTitle:string;
+    descriptionVideo:string;
+    uploadVideo:string;
+    discardVideo:string;
+    alertDiscardVideo:string;
+    uploadSuccess:string;
 } } = {
   en: {
     home:"Home",
@@ -101,6 +115,20 @@ export const languages: { [lang: string]: {
     purchaseCancelTitle:"Your order has been cancelled. No charges have been made.",
     purchaseCancelContact:"If you encountered any issues during the checkout process, please don't hesitate to contact our support team.",
     returnHome:"Return to Shop",
+    liveStreamTitle:"Livestream Page",
+    liveStreamTime:"Recording Time",
+    startRecord:"Start Recording",
+    stopRecord:"Stop Recording",
+    micOn:"Microphone On",
+    micOff:"Microphone Off",
+    previewVideo:"Preview Video",
+    titleVideo:"Video Title",
+    missingTitle:"Missing title",
+    descriptionVideo:"Video Description",
+    uploadVideo:"Upload Video",
+    discardVideo:"Discard Video",
+    alertDiscardVideo:"Are you sure you want to discard this video?",
+    uploadSuccess:"Video uploaded successfully",
   },
   vi: {
     home:"Trang chủ",
@@ -153,5 +181,20 @@ export const languages: { [lang: string]: {
     purchaseCancelTitle:"Đơn hàng của bạn đã bị hủy. Không có khoản phí nào được áp dụng.",
     purchaseCancelContact:"Nếu bạn gặp bất kỳ vấn đề nào trong quá trình thanh toán, vui lòng liên hệ với đội ngũ hỗ trợ của chúng tôi.",
     returnHome:"Quay lại cửa hàng",
+    liveStreamTitle:"Trang Livestream",
+    liveStreamTime:"Thời gian ghi hình",
+    startRecord:"Bắt đầu ghi hình",
+    stopRecord:"Dừng ghi hình",
+    micOn:"Mở mic",
+    micOff:"Tắt mic",
+    previewVideo:"Xem trước",
+    titleVideo:"Tiêu đề",
+    missingTitle:"Thiếu tiêu đề",
+    descriptionVideo:"Mô tả",
+    uploadVideo:"Tải video lên",
+    discardVideo:"Hủy",
+    alertDiscardVideo:"Bạn thực sự muốn hủy video này?",
+    uploadSuccess:"Tải video lên thành công",
+
   },
 };

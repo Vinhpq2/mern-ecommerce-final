@@ -2,7 +2,7 @@ import { create } from "zustand";
 import axios from "../lib/axios";
 import { toast } from "react-hot-toast";
 import type { UserStore } from "../types/userStore";
-import { useLanguageStore } from "./useLanguagesStore";
+import { useLanguageStore } from "./useLanguageStore";
 
 type SignupPayload = {
   name: string;

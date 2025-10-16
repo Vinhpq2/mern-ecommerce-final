@@ -58,7 +58,7 @@ declare global {
 }
 
 
-export default function Camera() {
+export default function Authentication() {
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
 

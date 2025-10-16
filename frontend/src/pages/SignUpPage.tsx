@@ -3,7 +3,7 @@ import {Link} from "react-router-dom"
 import {UserPlus,Mail,Lock,User,ArrowRight,Loader} from "lucide-react";
 import {motion} from "framer-motion"
 import {useUserStore} from "../stores/useUserStore";
-import { useLanguageStore } from "../stores/useLanguagesStore";
+import { useLanguageStore } from "../stores/useLanguageStore";
 
 const SignUpPage = () =>{
     const {t} = useLanguageStore();

@@ -1,7 +1,7 @@
 import { XCircle, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { useLanguageStore } from "../stores/useLanguagesStore";
+import { useLanguageStore } from "../stores/useLanguageStore";
 const PurchaseCancelPage = () => {
     const {t} = useLanguageStore();
 	return (

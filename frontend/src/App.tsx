@@ -12,8 +12,9 @@ import AdminPage from './pages/AdminPage';
 import CartPage from './pages/CartPage'
 import PurchaseSuccessPage from './pages/PurchaseSuccessPage';
 import PurchaseCancelPage from './pages/PurchaseCancelPage';
-import CameraPage from './pages/CameraPage';
+import AuthenticationPage from './pages/AuthenticationPage';
 import LivestreamPage from './pages/LivestreamPage';
+import VideoListPage from './pages/VideoListPage';
 function App() {
 
   const {user,checkAuth,checkingAuth} = useUserStore();
@@ -47,13 +48,14 @@ function App() {
       <Route path ='/' element ={<HomePage />} />
       <Route path ='/signup' element ={!user ? <SignUpPage />  : <Navigate to ="/"/>}/>
       <Route path ='/login' element ={!user ? <LoginPage /> : <Navigate to ="/"/>} />
-       <Route path='/camera' element ={user?.role === 'admin' ? <CameraPage/> : <Navigate to ="/login"/>}/>
+       <Route path='/face-authentication' element ={user?.role === 'admin' ? <AuthenticationPage/> : <Navigate to ="/login"/>}/>
       <Route path='/secret-dashboard' element ={user?.role === 'admin' ? <AdminPage/> : <Navigate to ="/login"/>}/>
       <Route path='/category/:category' element={<CategoryPage/>} />
       <Route path='/cart' element={user ? <CartPage/> : <Navigate to ="/login"/>} />
       <Route path='/purchase-success' element={user ? <PurchaseSuccessPage/> : <Navigate to ="/login"/>} />
       <Route path='/purchase-cancel' element={user ? <PurchaseCancelPage/> : <Navigate to ="/login"/>} />
-      <Route path='/livestream' element ={<LivestreamPage/>} />
+      <Route path='/livestream' element ={user?.role === 'admin' ?<LivestreamPage/>: <Navigate to ="/login"/>} />
+      <Route path="/video-list" element ={user ? <VideoListPage/> : <Navigate to ="/login"/>} />
     </Routes>
     </div>
   </div>

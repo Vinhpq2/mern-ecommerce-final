@@ -3,7 +3,7 @@ import {useProductStore} from "../stores/useProductStore";
 import {useParams} from "react-router-dom";
 import {motion} from "framer-motion";
 import ProductCard from '../components/ProductCard';
-import { useLanguageStore } from '../stores/useLanguagesStore';
+import { useLanguageStore } from '../stores/useLanguageStore';
 const CategoryPage = () => {
     const {fetchProductsByCategory,products} = useProductStore();
     const {category} = useParams();

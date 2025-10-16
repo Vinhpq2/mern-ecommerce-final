@@ -3,7 +3,7 @@ import { ShoppingCart } from "lucide-react";
 import { useUserStore } from "../stores/useUserStore";
 import { useCartStore } from "../stores/useCartStore";
 import type { Product } from "../types/product";
-import { useLanguageStore } from "../stores/useLanguagesStore";
+import { useLanguageStore } from "../stores/useLanguageStore";
 
 
 const ProductCard = ({product}:{product: Product }) => {

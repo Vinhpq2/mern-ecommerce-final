@@ -22,10 +22,12 @@
     "ioredis": "^5.6.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.2",
+    "multer": "^2.0.2",
     "pro": "file:",
     "stripe": "^18.0.0"
   },
   "devDependencies": {
+    "@types/node": "^24.8.0",
     "nodemon": "^3.1.9"
   }
 }

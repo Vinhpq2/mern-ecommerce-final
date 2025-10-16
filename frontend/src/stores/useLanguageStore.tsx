@@ -53,6 +53,20 @@ type LanguageStore = {
         purchaseCancelTitle:string;
         purchaseCancelContact:string;
         returnHome:string;
+        liveStreamTitle:string;
+        liveStreamTime:string;
+        startRecord:string;
+        stopRecord:string;
+        micOn:string;
+        micOff:string;
+        previewVideo:string;
+        titleVideo:string;
+        missingTitle:string;
+        descriptionVideo:string;
+        uploadVideo:string;
+        discardVideo:string;
+        alertDiscardVideo:string;
+        uploadSuccess:string;
     };
     setLang: (lang: string) => void;
 }

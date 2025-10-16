@@ -1,7 +1,7 @@
 import { Minus, Plus, Trash } from "lucide-react";
 import { useCartStore } from "../stores/useCartStore";
 import type { Cart } from "../types/cart";
-import { useLanguageStore } from "../stores/useLanguagesStore";
+import { useLanguageStore } from "../stores/useLanguageStore";
 const CartItem = ({ item }: { item: Cart }) => {
 	const { removeFromCart, updateQuantity } = useCartStore();
 	const {t} = useLanguageStore();

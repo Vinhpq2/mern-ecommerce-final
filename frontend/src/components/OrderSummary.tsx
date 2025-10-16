@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { MoveRight } from "lucide-react";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "../lib/axios";
-import { useLanguageStore } from "../stores/useLanguagesStore";
+import { useLanguageStore } from "../stores/useLanguageStore";
 
 const stripePromise = loadStripe(
 	"pk_test_51Rm8geQr29jZZIfP8tAqM5YjSPTWvW2h6I8mxAIFzD39XgDtjeziFaQHK0X2RYJwz8OOKcxeSDzr17al6m3qeuc000s6gYq8xV"

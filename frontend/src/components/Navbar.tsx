@@ -1,8 +1,8 @@
-import {ShoppingCart, UserPlus,LogIn,LogOut,Lock,Globe,Camera} from 'lucide-react';
+import {ShoppingCart, UserPlus,LogIn,LogOut,Lock,Globe,Camera,Video} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {useUserStore} from '../stores/useUserStore';
 import {useCartStore} from '../stores/useCartStore';
-import { useLanguageStore } from "../stores/useLanguagesStore";
+import { useLanguageStore } from "../stores/useLanguageStore";
 
 const Navbar = () => {
 
@@ -15,7 +15,7 @@ const Navbar = () => {
   return (
     <header className="fixed top-0 left-0 w-full bg-gray-900 bg-opacity-90 backdrop-blur-md 
     shadow-lg z-40 transition-all duration-300 border-b border-emerald-800">
-      <div className="container mx-auto px-4 py-3">
+      <div className="container mx-24 px-4 py-3">
         <div className="flex flex-wrap justify-between items-center">
         <Link to="/" className="text-2xl font-bold text-emerald-400 items-center space-x-2 flex">
         E-commerce</Link>
@@ -32,10 +32,10 @@ const Navbar = () => {
             </Link>
           )}
           {isAdmin && (
-            <Link to={"/camera"} className="bg-emerald-700 hover:bg-emerald-600 text-white px-3 py-1 rounded-md font-medium transition duration-300 ease-in-out flex items-center"
+            <Link to={"/face-authentication"} className="bg-emerald-700 hover:bg-emerald-600 text-white px-3 py-1 rounded-md font-medium transition duration-300 ease-in-out flex items-center"
             >
-              <Camera className="inline-block mr-1" size={18}/>
-              <span className="hidden sm:inline">Camera</span>
+              <Video className="inline-block mr-1" size={18}/>
+              <span className="hidden sm:inline">Livestream</span>
             </Link>
           )}
           {isAdmin && (
@@ -45,7 +45,10 @@ const Navbar = () => {
               <span className="hidden sm:inline">{t.dashboard}</span>
             </Link>
           )} 
-
+          {user && ( <Link to={"video-list"} className="bg-emerald-700 hover:bg-emerald-600 text-white px-3 py-1 rounded-md font-medium transition duration-300 ease-in-out flex items-center"
+            >
+              <span className="hidden sm:inline">Video list</span>
+            </Link>)}
           {user ?(
             <button className="bg-gray-700 hover:gray-600 text-while py-2 px-4 rounded-md flex items-center transition duration-300 ease-in-out"
             onClick={logout}>
