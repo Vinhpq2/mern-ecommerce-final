@@ -1,4 +1,4 @@
-import {ShoppingCart, UserPlus,LogIn,LogOut,Lock,Globe} from 'lucide-react';
+import {ShoppingCart, UserPlus,LogIn,LogOut,Lock,Globe,Camera} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {useUserStore} from '../stores/useUserStore';
 import {useCartStore} from '../stores/useCartStore';
@@ -31,7 +31,13 @@ const Navbar = () => {
               </span>}
             </Link>
           )}
-
+          {isAdmin && (
+            <Link to={"/camera"} className="bg-emerald-700 hover:bg-emerald-600 text-white px-3 py-1 rounded-md font-medium transition duration-300 ease-in-out flex items-center"
+            >
+              <Camera className="inline-block mr-1" size={18}/>
+              <span className="hidden sm:inline">Camera</span>
+            </Link>
+          )}
           {isAdmin && (
             <Link to={"/secret-dashboard"} className="bg-emerald-700 hover:bg-emerald-600 text-white px-3 py-1 rounded-md font-medium transition duration-300 ease-in-out flex items-center"
             >
