@@ -99,9 +99,6 @@ axios.interceptors.response.use(
 	(response) => response,
 	async (error) => {
 		const originalRequest = error.config;
-    console.log("Axios interceptor caught an error:", originalRequest);
-    console.log("Error details:", error.response);
-    console.log("test",refreshPromise);
 		if (error.response?.status === 401 && !originalRequest._retry) {
 			originalRequest._retry = true;
 

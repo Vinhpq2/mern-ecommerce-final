@@ -1,5 +1,5 @@
 import axios from "axios";
-console.log("ev", import.meta.env.MODE);
+console.log("env", import.meta.env.MODE);
 const axiosInstance = axios.create({
   baseURL:
     import.meta.env.MODE === "development"

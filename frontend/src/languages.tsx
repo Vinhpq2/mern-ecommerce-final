@@ -38,6 +38,15 @@ export const languages: { [lang: string]: {
     wrongPassword:string;
     invalid:string;
     adminDashboard:string;
+    createProduct:string;
+    products:string;
+    analytic:string;
+    totalUsers:string;
+    totalProducts:string;
+    totalSales:string;
+    totalRevenues:string;
+    sales:string;
+    revenue:string;
     processing:string;
     orderSummary:string;
     originalPrice:string;
@@ -105,6 +114,15 @@ export const languages: { [lang: string]: {
     wrongPassword:"Passwords do not match",
     invalid:"Invalid email or password",
     adminDashboard:"Admin Dashboard",
+    createProduct:"Create Product",
+    products:"Products",
+    analytic:"Analytics",
+    totalUsers:"Total Users",
+    totalProducts:"Total Products",
+    totalSales:"Total Sales",
+    totalRevenues:"Total Revenues",
+    sales:"Sales",
+    revenue:"Revenue",
     processing:"Processing...",
     orderSummary:"Order Summary",
     originalPrice:"Original Price",
@@ -172,6 +190,15 @@ export const languages: { [lang: string]: {
     wrongPassword:"Mật khẩu không khớp",
     invalid:"Email hoặc mật khẩu không đúng",
     adminDashboard:"Bảng điều khiển quản trị",
+    createProduct:"Tạo sản phẩm",
+    products:"Sản phẩm",
+    analytic:"Phân tích",
+    totalUsers:"Tổng người dùng",
+    totalProducts:"Tổng sản phẩm",
+    totalSales:"Tổng đơn hàng",
+    totalRevenues:"Tổng doanh thu",
+    sales:"Đơn hàng",
+    revenue:"Doanh thu",
     processing:"Đang xử lý...",
     orderSummary:"Tóm tắt đơn hàng",
     originalPrice:"Giá gốc",

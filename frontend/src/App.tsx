@@ -23,8 +23,6 @@ function App() {
     checkAuth();
   },[checkAuth]);
 
-  console.log("User in App.tsx:",user);
-
   useEffect(()=>{
     if(!user) return;
     getCartItems()

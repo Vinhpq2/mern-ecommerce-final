@@ -42,11 +42,13 @@ type LanguageStore = {
         wrongPassword:string;
         invalid:string;
         adminDashboard:string;
+        createProduct:string;
+        products:string;
+        analytic:string;
         totalUsers:string;
         totalProducts:string;
         totalSales:string;
         totalRevenues:string;
-        totalOrders:string;
         sales:string;
         revenue:string;
         processing:string;

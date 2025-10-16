@@ -20,7 +20,6 @@ const AnalyticsTab = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [dailySalesData, setDailySalesData] = useState([]);
 	const {t} = useLanguageStore();
-	console.log(dailySalesData);
 	useEffect(() => {
 		const fetchAnalyticsData = async () => {
 			try {

@@ -6,15 +6,18 @@ import ProductsList from "../components/ProductsList";
 import AnalyticsTab from "../components/AnalyticsTab";
 import { useProductStore } from "../stores/useProductStore";
 import { useLanguageStore } from "../stores/useLanguageStore";
-const tabs = [
-    {id:"create",label:"Tạo sản phẩm",icon:PlusCircle},
-    {id:"products",label:"Sản phẩm",icon:ShoppingBasket},
-    {id:"analytics",label:"Phân tích",icon:BarChart},
-]
+
 const AdminPage = () => {
     const [activeTab,setActiveTab] = useState("create");
     const {fetchAllProducts} = useProductStore();
     const {t} = useLanguageStore();
+    
+    const tabs = [
+    {id:"create",label:t.createProduct,icon:PlusCircle},
+    {id:"products",label:t.products,icon:ShoppingBasket},
+    {id:"analytics",label:t.analytic,icon:BarChart},
+]
+    
     useEffect(() =>{
         fetchAllProducts();
     },[fetchAllProducts]);

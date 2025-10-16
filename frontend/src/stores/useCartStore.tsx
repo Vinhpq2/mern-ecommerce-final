@@ -27,7 +27,6 @@ export const useCartStore = create<CartStore>((set, get) => ({
     }
 },
     getCartItems: async() =>{
-		console.log("Fetching cart items...");
         try{
             const res = await axios.get("/cart");
             set({cart:res.data});
@@ -52,7 +51,6 @@ export const useCartStore = create<CartStore>((set, get) => ({
 				return { cart:  newCart };
 			});
 			get().calculateTotals();
-			console.log("Product added to cart:", get().cart);
             toast.success("Đã thêm vào giỏ hàng",{id:"add"});
 		} catch {
 			toast.error("Lỗi thêm sản phẩm",{id:"error"});
