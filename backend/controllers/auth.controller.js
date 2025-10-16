@@ -21,13 +21,13 @@ const setCookies = (res,accessToken,refreshToken)=>{
     res.cookie("accessToken",accessToken,{
         httpOnly:true, // chặn xss , cross site scripting 
         secure:process.env.NODE_ENV === "production",
-        sameSite:"none", // chặn csrf cross-site request forgery
+        sameSite:"strict", // chặn csrf cross-site request forgery
         maxAge:15*60*1000, // 15m
 })
     res.cookie("refreshToken",refreshToken,{
     httpOnly:true, // chặn xss , cross site scripting 
     secure:process.env.NODE_ENV === "production",
-    sameSite:"none", // chặn csrf cross-site request forgery
+    sameSite:"strict", // chặn csrf cross-site request forgery
     maxAge:7*24*60*60*1000, // 7days
 })
 
@@ -77,10 +77,9 @@ export const login = async (req, res) => {
 		const user = await User.findOne({ email });
 
 		if (user && (await user.comparePassword(password))) {
-			const { accessToken, refreshToken } = generateToken(user._id);
+			const { accessToken, refreshToken } = await generateToken(user._id);
 			await StoreRefreshToken(user._id, refreshToken);
-			setCookies(res, accessToken, refreshToken);
-
+			await setCookies(res, accessToken, refreshToken);
 			res.json({
 				_id: user._id,
 				name: user.name,
@@ -132,14 +131,14 @@ try{
     const accessToken = jwt.sign({userId:decoded.userId},process.env.ACCESS_TOKEN_SECRET,{
         expiresIn:"15m"
     });
-
+    console.log("Access token refreshed successfully");
     res.cookie("accessToken",accessToken,{
         httpOnly:true,
         secure:process.env.NODE_ENV === "production",
         sameSite:"strict",
         maxAge:15*60*1000,     
     })
-
+    
     res.json({message:"Token refreshed successfully"}) 
 }
 catch(error){

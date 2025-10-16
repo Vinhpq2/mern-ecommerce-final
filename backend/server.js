@@ -19,8 +19,9 @@ app.use(cors({
     "https://mern-ecommerce-sage-five.vercel.app", // domain FE
     "http://localhost:5173"                   // domain dev local (nếu cần)
   ],
-  credentials: true,
   methods:["GET","POST","PUT","DELETE","PATCH"],
+  credentials: true,
+  
 }));
 // const PORT 
 const PORT = process.env.PORT || 5000;

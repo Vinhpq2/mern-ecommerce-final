@@ -16,7 +16,7 @@ export const protectRoute = async (req, res, next) => {
         }
 
         req.user = user;
-        console.log("User authenticated: protectRoute", req.cookie); // Debug: Log authenticated user
+
 
             }catch(error){
                 if(error.name === "TokenExpiredError")

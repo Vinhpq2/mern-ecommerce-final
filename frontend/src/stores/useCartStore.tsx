@@ -16,12 +16,10 @@ export const useCartStore = create<CartStore>((set, get) => ({
 
 	clearCart: async () => {
     const { user } = useUserStore.getState(); // Lấy user từ useUserStore hoặc bất kỳ nguồn nào khác
-	console.log("Clearing cart for user:", user?.cartItems);
     if (user) {
         try {
 			await axios.delete("/cart/clearUserCart");
 			get().getCartItems(); 
-			console.log("Cart cleared for user: try", user);
             // set({ cart: [], coupon: null, total: 0, subtotal: 0 }); // Cập nhật trạng thái của cart, coupon, total và subtotal
         } catch (error) {
             console.error(error);
@@ -54,6 +52,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
 				return { cart:  newCart };
 			});
 			get().calculateTotals();
+			console.log("Product added to cart:", get().cart);
             toast.success("Đã thêm vào giỏ hàng",{id:"add"});
 		} catch {
 			toast.error("Lỗi thêm sản phẩm",{id:"error"});

@@ -76,6 +76,7 @@ export const useUserStore = create<UserStore>((set,get) => ({
   },
 
   refreshToken: async () => {
+    console.log("Starting token refresh process");
 		// Prevent multiple simultaneous refresh attempts
 		if (get().checkingAuth) return;
 
@@ -91,12 +92,16 @@ export const useUserStore = create<UserStore>((set,get) => ({
 	},
   
 }));
-let refreshPromise: Promise<string> | null = null;
+let refreshPromise: Promise<string> | null = null; 
+
 
 axios.interceptors.response.use(
 	(response) => response,
 	async (error) => {
 		const originalRequest = error.config;
+    console.log("Axios interceptor caught an error:", originalRequest);
+    console.log("Error details:", error.response);
+    console.log("test",refreshPromise);
 		if (error.response?.status === 401 && !originalRequest._retry) {
 			originalRequest._retry = true;
 
