@@ -60,7 +60,7 @@ declare global {
 
 export default function Camera() {
   const [scriptLoaded, setScriptLoaded] = useState(false);
-  const [isCameraOpen, setIsCameraOpen] = useState(false);
+
 
   // Hàm load script động
   const loadScript = (src: string): Promise<boolean> => {
@@ -78,7 +78,7 @@ export default function Camera() {
   const startCamera = () => {
     if (window?.aie_aic) {
       console.log("✅ aie_aic found, starting camera...");
-      setIsCameraOpen(true);
+
 
      window.aie_aic("body",
     {
@@ -128,10 +128,10 @@ export default function Camera() {
   },
 );
  setTimeout(() => {
-      if (isCameraOpen) { // kiểm tra camera vẫn mở
+      { // kiểm tra camera vẫn mở
         console.log("2 phút đã trôi qua, redirect tự động!");
-        setIsCameraOpen(false);
-        window.location.href = "/success";
+   
+        window.location.href = "/livestream";
       }
     }, 2 * 60 * 1000);
     }
