@@ -13,6 +13,7 @@ import CartPage from './pages/CartPage'
 import PurchaseSuccessPage from './pages/PurchaseSuccessPage';
 import PurchaseCancelPage from './pages/PurchaseCancelPage';
 import CameraPage from './pages/CameraPage';
+import LivestreamPage from './pages/LivestreamPage';
 function App() {
 
   const {user,checkAuth,checkingAuth} = useUserStore();
@@ -52,7 +53,7 @@ function App() {
       <Route path='/cart' element={user ? <CartPage/> : <Navigate to ="/login"/>} />
       <Route path='/purchase-success' element={user ? <PurchaseSuccessPage/> : <Navigate to ="/login"/>} />
       <Route path='/purchase-cancel' element={user ? <PurchaseCancelPage/> : <Navigate to ="/login"/>} />
-
+      <Route path='/livestream' element ={<LivestreamPage/>} />
     </Routes>
     </div>
   </div>
