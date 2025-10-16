@@ -110,7 +110,11 @@ export default function Camera() {
     control: true,
     torch: true,
     zoom: { start: 1, step: 0.5 },
-    exit: true,
+    exit: () => {
+      console.log("Camera exited");
+      window.location.href = "/success"; // redirect dù có scan hay không
+    },
+
     location: true,
     align: "top",
     opacity: 1,
@@ -124,10 +128,6 @@ export default function Camera() {
      window.location.href = "/success";
   }
 );
-
-
-     
-     
     } else {
       console.error("❌ aie_aic not found");
       alert("Không thể khởi chạy camera API!");
