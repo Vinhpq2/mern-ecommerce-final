@@ -6,11 +6,25 @@ declare global {
   interface Window {
     aie_aic?: (
       selector: string,
-      config: Record<string, string>,
-      callback: (res: string, location: string) => void,
-      exit : () => void
+      config: {
+        type: string;
+        option: {
+          confidence: number;
+          draw_box: boolean;
+          data_uri: string;
+          data_label: string[];
+          data_file: string[];
+          deep_scan: boolean;
+          max_scan: number;
+        };
+        brand: string;
+        width: string;
+        video: string;
+        exit: () => void;
+      },
+      callback: (res:string, location: string) => void
     ) => void;
-    $?: string; // jQuery
+    $?: string;
   }
 }
 

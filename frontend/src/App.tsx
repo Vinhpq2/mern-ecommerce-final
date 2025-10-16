@@ -12,7 +12,7 @@ import AdminPage from './pages/AdminPage';
 import CartPage from './pages/CartPage'
 import PurchaseSuccessPage from './pages/PurchaseSuccessPage';
 import PurchaseCancelPage from './pages/PurchaseCancelPage';
-import CameraPage from './pages/Camera';
+import CameraPage from './pages/CameraPage';
 function App() {
 
   const {user,checkAuth,checkingAuth} = useUserStore();
