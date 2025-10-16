@@ -1,4 +1,4 @@
-import {ShoppingCart, UserPlus,LogIn,LogOut,Lock,Globe,Camera,Video} from 'lucide-react';
+import {ShoppingCart, UserPlus,LogIn,LogOut,Lock,Globe,ScrollText,Video} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {useUserStore} from '../stores/useUserStore';
 import {useCartStore} from '../stores/useCartStore';
@@ -47,6 +47,7 @@ const Navbar = () => {
           )} 
           {user && ( <Link to={"video-list"} className="bg-emerald-700 hover:bg-emerald-600 text-white px-3 py-1 rounded-md font-medium transition duration-300 ease-in-out flex items-center"
             >
+              <ScrollText className="inline-block mr-1" size={18}/>
               <span className="hidden sm:inline">Video list</span>
             </Link>)}
           {user ?(
