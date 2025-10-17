@@ -55,7 +55,6 @@ export const useUserStore = create<UserStore>((set,get) => ({
 
   checkAuth: async () => {
     set({ checkingAuth: true });
-
     try {
       const res = await axios.get("/auth/profile");
       set({ user: res.data, checkingAuth: false });

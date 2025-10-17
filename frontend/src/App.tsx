@@ -31,9 +31,8 @@ function App() {
     },[getCartItems,user]);
 
     useEffect(()=>{
-       if(!user) return;
         fetchVideo();
-    },[fetchVideo,user]);
+    },[fetchVideo]);
 
   if(checkingAuth)
     return 
