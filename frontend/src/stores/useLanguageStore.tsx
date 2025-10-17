@@ -45,6 +45,7 @@ type LanguageStore = {
         createProduct:string;
         products:string;
         analytic:string;
+        videoConsole:string;
         totalUsers:string;
         totalProducts:string;
         totalSales:string;

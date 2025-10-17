@@ -50,13 +50,13 @@ router.post("/add", upload.single("video"), async (req, res) => {
 
 
 // GET /api/video/
-router.get("/", async (req, res) => {
+router.get("/",async (req, res) => {
   try {
-    const videos = await Video.find().sort({ createdAt: -1 }); // mới nhất trước
-    res.status(200).json({ videos });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    const userId = req.params.userId;
+    const videos = await Video.find({ userId }).sort({ createdAt: -1 });
+    res.json(videos);
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi khi lấy video", error });
   }
 });
 

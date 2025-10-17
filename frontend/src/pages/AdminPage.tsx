@@ -1,9 +1,10 @@
-import {BarChart,PlusCircle,ShoppingBasket} from "lucide-react";
+import {BarChart,PlusCircle,ShoppingBasket,LayoutList} from "lucide-react";
 import {useEffect, useState} from 'react';
 import {motion} from 'framer-motion';
 import CreateProductForm from "../components/CreateProductForm";
 import ProductsList from "../components/ProductsList";
 import AnalyticsTab from "../components/AnalyticsTab";
+import VideoTab from "../components/VideoTab";
 import { useProductStore } from "../stores/useProductStore";
 import { useLanguageStore } from "../stores/useLanguageStore";
 
@@ -16,6 +17,7 @@ const AdminPage = () => {
     {id:"create",label:t.createProduct,icon:PlusCircle},
     {id:"products",label:t.products,icon:ShoppingBasket},
     {id:"analytics",label:t.analytic,icon:BarChart},
+     {id:"video",label:t.videoConsole,icon:LayoutList},
 ]
     
     useEffect(() =>{
@@ -46,6 +48,7 @@ const AdminPage = () => {
                 {activeTab ==="create" && <CreateProductForm/>}
                 {activeTab === "products" && <ProductsList/>}
                 {activeTab === "analytics" && <AnalyticsTab/>}
+                {activeTab === "video" && <VideoTab/>}
 
         </div>
     

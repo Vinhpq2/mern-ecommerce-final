@@ -107,7 +107,7 @@ export const LivestreamPage = () => {
       setVideoChunks([]);
       setTitle("");
       setDescription("");
-      toast.success(t.uploadSuccess);
+      toast.success(t.uploadSuccess,{id:"upload"});
     } catch (error) {
       console.error("Upload failed:", error);
     }
