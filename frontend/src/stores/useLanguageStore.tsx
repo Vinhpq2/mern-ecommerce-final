@@ -78,6 +78,7 @@ type LanguageStore = {
         discardVideo:string;
         alertDiscardVideo:string;
         uploadSuccess:string;
+        loadingUploadVideo:string;
     };
     setLang: (lang: string) => void;
 }

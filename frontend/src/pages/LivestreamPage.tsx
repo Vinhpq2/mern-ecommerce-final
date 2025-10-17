@@ -14,6 +14,7 @@ export const LivestreamPage = () => {
   const intervalRef = useRef<NodeJS.Timer | null>(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
   const { user } = useUserStore();
   const { t } = useLanguageStore();
   const streamRef = useRef<MediaStream | null>(null);
@@ -100,6 +101,7 @@ export const LivestreamPage = () => {
     formData.append("description", description || "description");
 
     try {
+        setIsUploading(true); // bật loading
         await addVideo(formData);
       setPreviewVideo(null);
       setVideoChunks([]);
@@ -196,11 +198,15 @@ export const LivestreamPage = () => {
 
             <div className="flex space-x-4">
   <button
-    onClick={uploadVideo}
-    className="px-4 py-2 bg-blue-600 rounded transition transform hover:bg-blue-500 hover:scale-105"
-  >
-    {t.uploadVideo}
-  </button>
+  onClick={uploadVideo}
+  disabled={isUploading}
+  className={`px-4 py-2 rounded text-white font-semibold ${
+    isUploading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+  }`}
+>
+  {isUploading ? t.loadingUploadVideo : t.uploadVideo}
+</button>
+
   <button
     onClick={discardVideo}
     className="px-4 py-2 bg-gray-500 rounded transition transform hover:bg-gray-400 hover:scale-105"

@@ -74,6 +74,7 @@ export const languages: { [lang: string]: {
     discardVideo:string;
     alertDiscardVideo:string;
     uploadSuccess:string;
+    loadingUploadVideo:string;
 } } = {
   en: {
     home:"Home",
@@ -151,6 +152,7 @@ export const languages: { [lang: string]: {
     discardVideo:"Discard Video",
     alertDiscardVideo:"Are you sure you want to discard this video?",
     uploadSuccess:"Video uploaded successfully",
+    loadingUploadVideo:"Uploading video...",
   },
   vi: {
     home:"Trang chủ",
@@ -228,6 +230,7 @@ export const languages: { [lang: string]: {
     discardVideo:"Hủy",
     alertDiscardVideo:"Bạn thực sự muốn hủy video này?",
     uploadSuccess:"Tải video lên thành công",
+    loadingUploadVideo:"Đang tải video lên...",
 
   },
 };
