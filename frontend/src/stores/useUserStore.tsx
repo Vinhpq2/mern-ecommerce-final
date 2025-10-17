@@ -76,7 +76,6 @@ export const useUserStore = create<UserStore>((set,get) => ({
   },
 
   refreshToken: async () => {
-    console.log("Starting token refresh process");
 		// Prevent multiple simultaneous refresh attempts
 		if (get().checkingAuth) return;
 

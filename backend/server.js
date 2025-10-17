@@ -14,6 +14,7 @@ import cors from "cors";
 
 dotenv.config()
 
+ // allow json data to be sent in the request body
 const app = express();
 app.use(cors({
   origin: [
@@ -31,11 +32,8 @@ const __dirname = path.resolve();
 app.use(express.json({limit:"10mb"})); // allow json data to be sent in the request body
 app.use(cookieParser());
 
- // allow json data to be sent in the request body
- app.get("/", (req, res) => {
-  console.log("Request nhận được:", req.method, req.url);
-  res.send("✅ Express is working!");
-});
+
+
 app.use("/api/video",videoRouters);
 app.use("/api/auth", authRouters);
 app.use("/api/products",productRouters);
@@ -45,17 +43,10 @@ app.use("/api/payments",paymentRouters);
 app.use("/api/analytics",analyticsRoutes);
 
 
-// if (process.env.NODE_ENV === "production") {
-// 	app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
-// 	app.use((req, res) => {
-// 		res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-// 	});
-// }
 
 
 app.listen(PORT,()=> {
-	console.log('aaa');
     console.log("Server is running on http://localhost:"+ PORT);
     console.log(`🌐 Public URL: ${process.env.RAILWAY_STATIC_URL || process.env.RAILWAY_PUBLIC_DOMAIN || "localhost:" + PORT}`);
     connectDB();

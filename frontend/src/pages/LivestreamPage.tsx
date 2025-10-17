@@ -1,8 +1,8 @@
 import { useRef, useState, useEffect } from "react";
-import axios from "../lib/axios";
 import { useUserStore } from "../stores/useUserStore";
 import {useLanguageStore} from "../stores/useLanguageStore";
 import { toast } from "react-hot-toast";
+import {useVideoStore} from "../stores/useVideoStore";
 export const LivestreamPage = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -17,6 +17,7 @@ export const LivestreamPage = () => {
   const { user } = useUserStore();
   const { t } = useLanguageStore();
   const streamRef = useRef<MediaStream | null>(null);
+  const {addVideo} = useVideoStore();
 
   // Timer
   useEffect(() => {
@@ -99,10 +100,7 @@ export const LivestreamPage = () => {
     formData.append("description", description || "description");
 
     try {
-      const res = await axios.post("/video/add", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      console.log("Upload success:", res.data);
+        await addVideo(formData);
       setPreviewVideo(null);
       setVideoChunks([]);
       setTitle("");
@@ -137,28 +135,43 @@ export const LivestreamPage = () => {
         className="w-[800px] h-[600px] bg-black mb-4"
       ></video>
 
-      <div className="flex space-x-4 mb-4">
-        <button
-          onClick={startRecording}
-          disabled={recording}
-          className="px-4 py-2 bg-green-600 rounded"
-        >
-          {t.startRecord}
-        </button>
-        <button
-          onClick={stopRecording}
-          disabled={!recording}
-          className="px-4 py-2 bg-red-600 rounded"
-        >
-          {t.stopRecord}
-        </button>
-        <button
-          onClick={toggleMic}
-          className={`px-4 py-2 rounded ${micOn ? "bg-green-500" : "bg-red-500"}`}
-        >
-          {micOn ? t.micOn : t.micOff}
-        </button>
-      </div>
+     <div className="flex space-x-4 mb-6">
+  <button
+    onClick={startRecording}
+    disabled={recording}
+    className={`px-5 py-2.5 rounded-xl text-white font-medium shadow-md transition-all duration-300 
+      ${recording 
+        ? "bg-green-400 cursor-not-allowed opacity-70" 
+        : "bg-green-600 hover:bg-green-700 hover:scale-105 active:scale-95"
+      }`}
+  >
+    🎬 {t.startRecord}
+  </button>
+
+  <button
+    onClick={stopRecording}
+    disabled={!recording}
+    className={`px-5 py-2.5 rounded-xl text-white font-medium shadow-md transition-all duration-300
+      ${!recording 
+        ? "bg-red-400 cursor-not-allowed opacity-70" 
+        : "bg-red-600 hover:bg-red-700 hover:scale-105 active:scale-95"
+      }`}
+  >
+    ⏹️ {t.stopRecord}
+  </button>
+
+  <button
+    onClick={toggleMic}
+    className={`px-5 py-2.5 rounded-xl font-medium shadow-md transition-all duration-300 text-white
+      ${micOn 
+        ? "bg-green-500 hover:bg-green-600 hover:scale-105 active:scale-95" 
+        : "bg-red-500 hover:bg-red-600 hover:scale-105 active:scale-95"
+      }`}
+  >
+    {micOn ? "🎤 Mic ON" : "🔇 Mic OFF"}
+  </button>
+</div>
+
 
       {/* Modal preview */}
       {previewVideo && (

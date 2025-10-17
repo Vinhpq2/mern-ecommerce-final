@@ -2,6 +2,8 @@ import express from "express";
 import multer from "multer";
 import Video from "../models/video.model.js";
 import  cloudinary from "../lib/cloudinary.js";
+import {protectRoute} from "../middleware/auth.middleware.js";
+import { fetchVideo,getVideoByUserId, deleteVideoById } from "../controllers/video.controller.js";
 
 const router = express.Router();
 const storage = multer.memoryStorage();
@@ -9,6 +11,7 @@ const upload = multer({ storage });// lưu tạm trong memory
 
 // 📌 API tạo video mới
 router.post("/add", upload.single("video"), async (req, res) => {
+  console.log("call add video");
   try {
     const { userId, title, description } = req.body;
     if (!req.file || !userId) {
@@ -47,40 +50,12 @@ router.post("/add", upload.single("video"), async (req, res) => {
 });
 
 
+router.get("/userId",protectRoute,getVideoByUserId);
 
+
+router.delete("/:id",protectRoute, deleteVideoById);
 
 // GET /api/video/
-router.get("/",async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    const videos = await Video.find({ userId }).sort({ createdAt: -1 });
-    res.json(videos);
-  } catch (error) {
-    res.status(500).json({ message: "Lỗi khi lấy video", error });
-  }
-});
-
-// GET /api/video/user/:userId
-router.get("/user/:userId", async (req, res) => {
-  try {
-    const { userId } = req.params;
-    const videos = await Video.find({ userId }).sort({ createdAt: -1 });
-    res.json(videos);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
-
-router.get("/:id", async (req, res) => {
-  try {
-    const video = await Video.findById(req.params.id).populate("userId", "name email");
-    if (!video) return res.status(404).json({ message: "Video not found" });
-    res.json(video);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
+router.get("/",protectRoute,fetchVideo);
 
 export default router;

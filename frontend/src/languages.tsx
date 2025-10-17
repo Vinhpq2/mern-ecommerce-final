@@ -41,6 +41,7 @@ export const languages: { [lang: string]: {
     createProduct:string;
     products:string;
     analytic:string;
+    videoConsole:string;
     totalUsers:string;
     totalProducts:string;
     totalSales:string;
@@ -117,6 +118,7 @@ export const languages: { [lang: string]: {
     createProduct:"Create Product",
     products:"Products",
     analytic:"Analytics",
+    videoConsole:"Video Console",
     totalUsers:"Total Users",
     totalProducts:"Total Products",
     totalSales:"Total Sales",
@@ -192,6 +194,7 @@ export const languages: { [lang: string]: {
     adminDashboard:"Bảng điều khiển quản trị",
     createProduct:"Tạo sản phẩm",
     products:"Sản phẩm",
+    videoConsole:"Video ",
     analytic:"Phân tích",
     totalUsers:"Tổng người dùng",
     totalProducts:"Tổng sản phẩm",

@@ -6,6 +6,7 @@ import CategoryPage from './pages/CategoryPage'
 import Navbar from './components/Navbar'
 import {useUserStore} from './stores/useUserStore';
 import {useCartStore} from './stores/useCartStore';
+import {useVideoStore} from './stores/useVideoStore';
 import {useEffect} from 'react';
 import LoadingSpinner from './components/LoadingSpinner';
 import AdminPage from './pages/AdminPage';
@@ -19,6 +20,7 @@ function App() {
 
   const {user,checkAuth,checkingAuth} = useUserStore();
   const {getCartItems} = useCartStore();
+  const {fetchVideo} = useVideoStore();
   useEffect(()=>{
     checkAuth();
   },[checkAuth]);
@@ -27,6 +29,11 @@ function App() {
     if(!user) return;
     getCartItems()
     },[getCartItems,user]);
+
+    useEffect(()=>{
+       if(!user) return;
+        fetchVideo();
+    },[fetchVideo,user]);
 
   if(checkingAuth)
     return 

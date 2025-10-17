@@ -1,28 +1,12 @@
-import { useEffect, useState } from "react";
-import axios from "../lib/axios";
-
-type VideoType = {
-  _id: string;
-  userId: string;
-  title: string;
-  description: string;
-  videoUrl: string;
-};
+import { useVideoStore } from "../stores/useVideoStore";
+import { useEffect } from "react";
 
 const VideoListPage = () => {
-  const [videos, setVideos] = useState<VideoType[]>([]);
+  const {videos, fetchVideo} = useVideoStore();
 
   useEffect(() => {
-    const fetchVideos = async () => {
-      try {
-        const res = await axios.get("/video/"); // lấy tất cả video
-        setVideos(res.data.videos);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchVideos();
-  }, []);
+    fetchVideo();
+  }, [fetchVideo]);
 
   return (
     <div className="flex flex-wrap gap-4">
