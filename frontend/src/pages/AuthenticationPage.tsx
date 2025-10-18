@@ -127,16 +127,16 @@ export default function Authentication() {
      window.location.href = "/success";
   },
 );
- setTimeout(() => {
-      if (isCameraOpen) { // kiểm tra camera vẫn mở
-        console.log("2 phút đã trôi qua, redirect tự động!");
-        setIsCameraOpen(false);
-        window.location.href = "/livestream";
-      }
-      else
-        console.log("Camera đã đóng trước 2 phút, không redirect.");
-        window.location.href = "/livestream";
-    }, 1 * 60 * 1000);
+//  setTimeout(() => {
+//       if (isCameraOpen) { // kiểm tra camera vẫn mở
+//         console.log("2 phút đã trôi qua, redirect tự động!");
+//         setIsCameraOpen(false);
+//         window.location.href = "/livestream";
+//       }
+//       else
+//         console.log("Camera đã đóng trước 2 phút, không redirect.");
+//         window.location.href = "/livestream";
+//     }, 1 * 60 * 1000);
     }
     else {
       console.error("❌ aie_aic not found");
