@@ -144,7 +144,7 @@ export default function CameraAuthentication() {
         console.log("📍 Location:", location);
         stopAllCameras();
         setIsCameraOpen(false);
-        window.location.href = "/success";
+        // window.location.href = "/success";
       }
     );
 
@@ -154,7 +154,7 @@ export default function CameraAuthentication() {
         console.log("⏰ 2 phút trôi qua - tự động tắt camera!");
         stopAllCameras();
         setIsCameraOpen(false);
-        window.location.href = "/livestream";
+        // window.location.href = "/livestream";
       }
     }, 2 * 60 * 1000);
   };
