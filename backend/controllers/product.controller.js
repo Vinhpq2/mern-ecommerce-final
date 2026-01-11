@@ -41,7 +41,7 @@ export const getFeaturedProducts = async (req, res)=>{
 
 export const createProduct = async (req, res) => {
     try{
-        const {name, price, description, image, category} = req.body;
+        const {name, price, description, image, category, sizes} = req.body;
 
         let cloudinaryResponse = null;
         if(image){
@@ -53,6 +53,8 @@ export const createProduct = async (req, res) => {
             description,
             price,
             category,
+            // Nếu sizes là chuỗi (vd: "39,40") thì tách mảng, nếu là mảng thì giữ nguyên, không có thì là mảng rỗng
+            sizes: sizes ? (typeof sizes === "string" ? sizes.split(",").map(s => s.trim()) : sizes) : [], 
             image: cloudinaryResponse?.secure_url ? cloudinaryResponse.secure_url : "",
             // cloudinary tra ve url an toan nen can tra ve rong neu secure_url là rỗng 
             
@@ -65,6 +67,43 @@ export const createProduct = async (req, res) => {
 
 }}
 
+export const updateProduct = async (req, res) => {
+	try {
+		const { name, description, price, image, category, sizes } = req.body;
+		
+		// Tìm sản phẩm theo ID
+		const product = await Product.findById(req.params.id);
+
+		if (!product) {
+			return res.status(404).json({ message: "Product not found" });
+		}
+
+		// Nếu có ảnh mới (dạng base64, không phải link http cũ) thì upload lên Cloudinary
+		if (image && !image.startsWith("http")) {
+			try {
+				const uploadResponse = await cloudinary.uploader.upload(image, {
+					folder: "products",
+				});
+				product.image = uploadResponse.secure_url;
+			} catch (error) {
+				console.log("Error uploading image:", error);
+			}
+		}
+
+		// Cập nhật các trường thông tin
+		product.name = name || product.name;
+		product.description = description || product.description;
+		product.price = price || product.price;
+		product.category = category || product.category;
+		product.sizes = sizes || product.sizes;
+
+		const updatedProduct = await product.save();
+		res.json(updatedProduct);
+	} catch (error) {
+		console.error("Error in updateProduct controller", error.message);
+		res.status(500).json({ message: "Server Error", error: error.message });
+	}
+};
 export const deleteProduct = async (req,res)=>{
     try {
         const product = await Product.findById(req.params.id)
@@ -152,6 +191,42 @@ export const toggleFeaturedProduct = async (req, res) => {
         res.status(500).json({message:"Server error", error: error.message});
     }
 }
+
+export const searchProducts = async (req, res) => {
+    try {
+        const { query } = req.query; // Lấy từ khóa từ URL, ví dụ: /api/products/search?query=iphone
+
+        if (!query) {
+            return res.status(400).json({ message: "Vui lòng nhập từ khóa tìm kiếm" });
+        }
+
+        // Sử dụng $regex để tìm kiếm gần đúng
+        // $options: "i" nghĩa là case-insensitive (không phân biệt hoa thường)
+        const products = await Product.find({
+            $or: [
+                { name: { $regex: query, $options: "i" } },
+                { description: { $regex: query, $options: "i" } },
+                { category: { $regex: query, $options: "i" } }
+            ]
+        }).limit(10); // Giới hạn 10 kết quả để hiển thị trên dropdown
+
+        res.json({ products });
+    } catch (error) {
+        console.error("Error in searchProducts controller", error.message);
+        res.status(500).json({ message: "Server Error", error: error.message });
+    }
+};
+
+export const getProductById = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if (!product) return res.status(404).json({ message: "Product not found" });
+        res.json(product);
+    } catch (error) {
+        console.error("Error in getProductById controller", error.message);
+        res.status(500).json({ message: "Server Error", error: error.message });
+    }
+};
 
 async function updateFeaturedProductsCache() {
     try {
