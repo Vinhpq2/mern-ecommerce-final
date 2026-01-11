@@ -4,7 +4,7 @@ const axiosInstance = axios.create({
   baseURL:
     import.meta.env.MODE === "development"
       ? "/api"
-      : "https://mern-ecommerce-be-production.up.railway.app/api",
+      : "https://novel-jamie-be-ecommerce-f1668421.koyeb.app/api",
   withCredentials: true,
 });
 
