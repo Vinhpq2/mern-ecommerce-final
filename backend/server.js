@@ -22,7 +22,7 @@ app.use(cors({
     "http://localhost:5173"                   // domain dev local (nếu cần)
   ],
   methods:["GET","POST","PUT","DELETE","PATCH"],
-  credentials: false,
+  credentials: true,
   
 }));
 // const PORT 
