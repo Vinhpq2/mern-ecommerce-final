@@ -1,12 +1,27 @@
 import { motion } from "framer-motion";
-import { Trash, Star } from "lucide-react";
+import { Trash, Star, Edit } from "lucide-react";
 import { useProductStore } from "../stores/useProductStore";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import EditProductForm from "./EditProductForm";
+import type { Product } from "../types/product";
 
 const ProductsList = () => {
 	const { deleteProduct, toggleFeaturedProduct, products } = useProductStore();
 	const [showModal, setShowModal] = useState(false);
+	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 	const [selectedId, setSelectedId] = useState<string | null>(null);
+	const [productToEdit, setProductToEdit] = useState<Product | null>(null);
+	const [activeCategory, setActiveCategory] = useState("all");
+
+	// Khóa cuộn trang body khi Modal Edit mở
+	useEffect(() => {
+		if (isEditModalOpen) {
+			document.body.style.overflow = "hidden";
+		} else {
+			document.body.style.overflow = "unset";
+		}
+		return () => { document.body.style.overflow = "unset"; };
+	}, [isEditModalOpen]);
 
 	const handleDeleteClick = (id: string) => {
 		setSelectedId(id);
@@ -21,8 +36,40 @@ const ProductsList = () => {
 		setSelectedId(null);
 	};
 
+	const handleEditClick = (product: Product) => {
+		setProductToEdit(product);
+		setIsEditModalOpen(true);
+	};
+
+	const filteredProducts = activeCategory === "all" 
+		? products 
+		: products?.filter((product) => product.category === activeCategory);
+
 	return (
 		<>
+			{/* Category Filter Tabs */}
+			<div className='flex flex-wrap justify-center gap-4 mb-8'>
+				<button
+					onClick={() => setActiveCategory("all")}
+					className={`px-4 py-2 rounded-full transition-colors ${
+						activeCategory === "all" ? "bg-emerald-600 text-white" : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+					}`}
+				>
+					All
+				</button>
+				{[...new Set(products?.map((p) => p.category))].filter(Boolean).map((cat) => (
+					<button
+						key={cat}
+						onClick={() => setActiveCategory(cat as string)}
+						className={`px-4 py-2 rounded-full transition-colors ${
+							activeCategory === cat ? "bg-emerald-600 text-white" : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+						}`}
+					>
+						{(cat as string).charAt(0).toUpperCase() + (cat as string).slice(1)}
+					</button>
+				))}
+			</div>
+
 			{/* Bảng sản phẩm */}
 			<motion.div
 				className='bg-gray-800 shadow-lg rounded-lg overflow-hidden max-w-4xl mx-auto'
@@ -52,7 +99,7 @@ const ProductsList = () => {
 					</thead>
 
 					<tbody className='bg-gray-800 divide-y divide-gray-700'>
-						{products?.map((product) => (
+						{filteredProducts?.map((product) => (
 							<tr key={product._id} className='hover:bg-gray-700'>
 								<td className='px-6 py-4 whitespace-nowrap'>
 									<div className='flex items-center'>
@@ -90,6 +137,12 @@ const ProductsList = () => {
 								</td>
 								<td className='px-6 py-4 whitespace-nowrap text-sm font-medium'>
 									<button
+										onClick={() => handleEditClick(product)}
+										className='text-blue-400 hover:text-blue-300 mr-2'
+									>
+										<Edit className='h-5 w-5' />
+									</button>
+									<button
 										onClick={() => handleDeleteClick(product._id)}
 										className='text-red-400 hover:text-red-300'
 									>
@@ -126,8 +179,17 @@ const ProductsList = () => {
 					</div>
 				</div>
 			)}
+
+			{/* Modal Edit Product */}
+			{isEditModalOpen && productToEdit && (
+				<div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start z-[9999] p-4 pt-24 overflow-y-auto'>
+					<EditProductForm 
+						product={productToEdit} 
+						onClose={() => setIsEditModalOpen(false)} 
+					/>
+				</div>
+			)}
 		</>
 	);
 };
-
 export default ProductsList;

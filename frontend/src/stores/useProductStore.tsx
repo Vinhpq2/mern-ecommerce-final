@@ -6,9 +6,9 @@ import type {ProductStore} from "../types/productStore";
 
 
 export const useProductStore =  create<ProductStore>((set) => ({
-    products:[],
+    products: [],
     loading:false,
-
+    product: null as unknown as Product,
     createProduct: async (productData) =>{
         set({loading:true});
         try{
@@ -48,6 +48,44 @@ export const useProductStore =  create<ProductStore>((set) => ({
         set({loading:false});
         toast.error("Lấy sản phẩm thất bại");
       }
+    },
+
+    fetchProductsBySearch: async (searchTerm: string) => {
+      set({ loading: true });
+      try {
+        const res = await axios.get(`/products/search?query=${searchTerm}`);
+        set({ products: res.data.products, loading: false });
+      } catch (error) {
+        set({ loading: false });
+        console.error("Error searching products:", error);
+        toast.error("Tìm kiếm thất bại");
+      }
+    },
+
+    fetchProductById: async (productId: string) => {
+      set({ loading: true });
+      try {
+        const res = await axios.get(`/products/${productId}`);
+        set({ product: res.data, loading: false });
+      } catch {
+        set({ loading: false });
+        toast.error("Lấy thông tin sản phẩm thất bại");
+      }
+    },
+
+        updateProduct: async (productId, productData) => {
+        set({ loading: true });
+        try {
+            const res = await axios.put(`/products/${productId}`, productData);
+            set((state) => ({
+                products: state.products.map((p) => (p._id === productId ? res.data : p)),
+                loading: false,
+            }));
+            toast.success("Product updated successfully");
+        } catch (error) {
+            set({ loading: false });
+            toast.error((error as any).response?.data?.error || "Failed to update product");
+        }
     },
 
     deleteProduct: async (productId) =>{
@@ -95,5 +133,4 @@ export const useProductStore =  create<ProductStore>((set) => ({
 			console.log("Error fetching featured products:", error);
 		}
 	},
-
 }))

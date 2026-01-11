@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {motion} from 'framer-motion';
 import {PlusCircle,Upload,Loader} from "lucide-react";
 import { useProductStore } from '../stores/useProductStore';
+import type { Product } from "../types/product";
 
 const categories = ["jeans","t-shirts","shoes","glasses","jackets","suits","bags"];
 const CreateProductForm = () => {
@@ -12,19 +13,25 @@ const CreateProductForm = () => {
         price:"",
         category:"",
         image:"",
+        sizes:"",
     });
     
 
     const {createProduct,loading} = useProductStore();
-    const handleSubmit :React.FormEventHandler<HTMLFormElement> = (e) =>{
+    const handleSubmit :React.FormEventHandler<HTMLFormElement> = async (e) =>{
         e.preventDefault();
         if(Number(newProduct.price) <= 0){
             alert("Price must be greater than 0");
             return;
         }
         try{
-            createProduct(newProduct);
-            setNewProduct({_id:"",name:"",description:"",price:"",category:"",image:""});
+            const productData = {
+                ...newProduct,
+                price: Number(newProduct.price),
+                sizes: newProduct.sizes ? newProduct.sizes.split(",").map(s => s.trim()).filter(Boolean) : [],
+            };
+            await createProduct(productData as unknown as Product);
+            setNewProduct({_id:"",name:"",description:"",price:"",category:"",image:"", sizes:""});
     }
     catch{
         console.error("Error creating product");
@@ -113,6 +120,20 @@ const CreateProductForm = () => {
                 <option key={category} value={category}>{category}</option>
             ))}
             </select>
+        </div>
+
+        <div>
+            <label htmlFor="sizes" className="block text-sm font-medium text-gray-300">
+                Kích thước (Size)
+            </label>
+            <input 
+            type="text"
+            id="sizes"
+            value={newProduct.sizes}
+            onChange={(e)=>setNewProduct({...newProduct,sizes:e.target.value})}
+            className="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 
+            text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+            placeholder="Ví dụ: S, M, L hoặc 39, 40, 41 (Bỏ trống nếu không có)"/>
         </div>
 
         <div className="mt-1 flex items-center">

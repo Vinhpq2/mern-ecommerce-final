@@ -1,14 +1,33 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCartStore } from "../stores/useCartStore";
+import { useUserStore } from "../stores/useUserStore";
 import type { Product } from "../types/product";
+import { Link } from "react-router-dom";
 
 const FeaturedProducts = ({ featuredProducts }: { featuredProducts: Product[] }) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [itemsPerPage, setItemsPerPage] = useState(4);
 
 	const { addToCart } = useCartStore();
+	const { user } = useUserStore();
 
+	const handleAddToCart = (product: Product) => {
+		if (!user) {
+			toast.error("Đăng nhập để thêm vào giỏ hàng", { id: "login" });
+            // {id:"login"} để chống spam thêm giỏ hàng hiển thị nhiều lần
+			return;
+		} else {
+			// @ts-ignore
+			if (product.sizes && product.sizes.length > 0) {
+				toast("Vui lòng chọn kích thước", { icon: "ℹ️", id:"select-size-featured" });
+				return;
+			}
+			// add to cart
+			addToCart(product);
+		}
+	};
 	useEffect(() => {
 		const handleResize = () => {
 			if (window.innerWidth < 640) setItemsPerPage(1);
@@ -47,19 +66,36 @@ const FeaturedProducts = ({ featuredProducts }: { featuredProducts: Product[] })
 								<div key={product._id} className='w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 flex-shrink-0 px-2'>
 									<div className=' backdrop-blur-sm rounded-lg shadow-lg overflow-hidden h-full transition-all duration-300 hover:shadow-xl border border-emerald-500/30'>
 										<div className='overflow-hidden'>
-											<img
-												src={product.image}
-												alt={product.name}
-												className='w-full h-48 object-cover transition-transform duration-300 ease-in-out hover:scale-110'
-											/>
+											<Link to={`/product/${product._id}`}>
+												<img
+													src={product.image}
+													alt={product.name}
+													className='w-full h-48 object-cover transition-transform duration-300 ease-in-out hover:scale-110'
+												/>
+											</Link>
 										</div>
 										<div className='p-4'>
-											<h3 className='text-lg font-semibold mb-2 text-white'>{product.name}</h3>
+											<Link to={`/product/${product._id}`}>
+												<h3 className='text-lg font-semibold mb-2 text-white hover:text-emerald-400 transition-colors'>{product.name}</h3>
+											</Link>
+											
+											{/* @ts-ignore */}
+											{product.sizes && product.sizes.length > 0 && (
+												<div className="flex flex-wrap gap-1 mb-2">
+													{/* @ts-ignore */}
+													{product.sizes.slice(0, 3).map((size: string) => (
+														<span key={size} className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded border border-gray-600">
+															{size}
+														</span>
+													))}
+												</div>
+											)}
+
 											<p className='text-emerald-300 font-medium mb-4'>
 												${Number(product.price).toFixed(2)}
 											</p>
 											<button
-												onClick={() => addToCart(product)}
+												onClick={() => handleAddToCart(product)}
 												className='w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 px-4 rounded transition-colors duration-300 
 												flex items-center justify-center'
 											>

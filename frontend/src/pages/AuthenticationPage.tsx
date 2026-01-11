@@ -48,7 +48,7 @@ declare global {
   }
 }
 
-export default function CameraAuthentication() {
+const CameraAuthentication = () => {
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
 
@@ -129,7 +129,7 @@ export default function CameraAuthentication() {
           console.log("Camera exited");
           stopAllCameras();
           setIsCameraOpen(false);
-          window.location.href = "/success";
+          window.location.href = "/failed";
         },
 
         location: true,
@@ -144,20 +144,10 @@ export default function CameraAuthentication() {
         console.log("📍 Location:", location);
         stopAllCameras();
         setIsCameraOpen(false);
-        // window.location.href = "/success";
+        window.location.href = "/success";
       }
     );
-
-    // ⏱️ Tự động tắt camera sau 2 phút nếu vẫn mở
-    setTimeout(() => {
-      if (isCameraOpen) {
-        console.log("⏰ 2 phút trôi qua - tự động tắt camera!");
-        stopAllCameras();
-        setIsCameraOpen(false);
-        // window.location.href = "/livestream";
-      }
-    }, 2 * 60 * 1000);
-  };
+  }
 
   // 🧩 Hàm tải script và khởi chạy camera
   const handleLoadAndInit = async () => {
@@ -182,13 +172,7 @@ export default function CameraAuthentication() {
     }
   };
 
-  // 🧹 Cleanup khi rời khỏi trang (unmount)
-  useEffect(() => {
-    return () => {
-      console.log("🧹 Cleanup on unmount");
-      stopAllCameras();
-    };
-  }, []);
+
 
   // ===================== JSX =====================
   return (
@@ -246,3 +230,4 @@ export default function CameraAuthentication() {
     </div>
   );
 }
+export default CameraAuthentication;

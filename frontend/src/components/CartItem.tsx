@@ -44,6 +44,8 @@ const CartItem = ({ item }: { item: Cart }) => {
 					<p className='text-base font-medium text-white hover:text-emerald-400 hover:underline'>
 						{item.name}
 					</p>
+					{/* @ts-ignore */}
+					{item.size && <p className='text-sm text-gray-400'>Size: {item.size}</p>}
 					<p className='text-sm text-gray-400'>{item.description}</p>
 
 					<div className='flex items-center gap-4'>
