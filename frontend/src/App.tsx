@@ -17,6 +17,8 @@ import CameraAuthentication from './pages/AuthenticationPage';
 import LivestreamPage from './pages/LivestreamPage';
 import VideoListPage from './pages/VideoListPage';
 import ProductInfo from './pages/ProductInfo';
+import TestLivestream from './pages/test';
+import TestViewer from './pages/TestViewer';
 function App() {
 
   const {user,checkAuth,checkingAuth} = useUserStore();
@@ -62,6 +64,9 @@ function App() {
       <Route path='/livestream' element ={user?.role === 'admin' ?<LivestreamPage/>: <Navigate to ="/login"/>} />
       <Route path="/video-list" element ={user ? <VideoListPage/> : <Navigate to ="/login"/>} />
       <Route path='/product/:id' element={<ProductInfo />} />
+      <Route path="/test" element={<TestLivestream />} />
+      <Route path="/test-viewer" element={<TestViewer />} />
+      <Route path="/live/:id" element={<TestViewer />} />
     </Routes>
     </div>
   </div>
