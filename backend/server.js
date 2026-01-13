@@ -1,4 +1,5 @@
 import express from "express";
+import http from "http";
 import dotenv from "dotenv";
 import path from "path";
 import authRouters from "./routes/auth.route.js";
@@ -11,11 +12,23 @@ import videoRouters from "./routes/video.router.js";
 import cookieParser from 'cookie-parser';
 import { connectDB } from "./lib/db.js";
 import cors from "cors";
+import { initializeSocket } from "./socket.js";
 
 dotenv.config()
 
  // allow json data to be sent in the request body
 const app = express();
+const server = http.createServer(app);
+
+// Middleware log request để debug trên Koyeb
+app.use((req, res, next) => {
+  console.log(`[REQUEST] ${req.method} ${req.url} - IP: ${req.ip}`);
+  next();
+});
+
+// Khởi tạo Socket.io từ file riêng
+initializeSocket(server);
+
 app.use(cors({
   origin: [
     "https://mern-ecommerce-sage-five.vercel.app", // domain FE
@@ -46,7 +59,7 @@ app.use("/api/analytics",analyticsRoutes);
 
 
 
-app.listen(PORT,()=> {
+server.listen(PORT,()=> {
     console.log("Server is running on http://localhost:"+ PORT);
     console.log(`🌐 Public URL: ${process.env.RAILWAY_STATIC_URL || process.env.RAILWAY_PUBLIC_DOMAIN || "localhost:" + PORT}`);
     connectDB();
