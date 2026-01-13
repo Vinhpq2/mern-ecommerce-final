@@ -58,6 +58,8 @@ const TestViewer = () => {
       setMyPeerId(id);
     });
 
+    peer.on('error', (err) => console.error('PeerJS Viewer Error:', err));
+
     // Lắng nghe cuộc gọi từ Host
     peer.on("call", (call) => {
       call.answer(); // Chấp nhận cuộc gọi
@@ -140,6 +142,7 @@ const TestViewer = () => {
               ref={videoRef}
               autoPlay
               playsInline
+              muted // Quan trọng: Phải mute thì mới autoplay được trên Chrome/iOS
               controls
               className="w-full h-full object-contain"
             />

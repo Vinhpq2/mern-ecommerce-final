@@ -43,9 +43,11 @@ const TestLivestream = () => {
   useEffect(() => {
     if (!user || !socketRef.current) return;
 
-    // Tạo Peer với ID là user._id
-    const peer = new Peer(user._id);
+    // Để PeerJS tự tạo ID ngẫu nhiên để tránh lỗi "ID taken" khi F5
+    const peer = new Peer();
     peerRef.current = peer;
+
+    peer.on('error', (err) => console.error('PeerJS Host Error:', err));
 
     // Lắng nghe yêu cầu lấy video từ Viewer
     socketRef.current.on("get-stream-request", ({ viewerPeerId }: { viewerPeerId: string }) => {
