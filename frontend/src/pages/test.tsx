@@ -79,7 +79,7 @@ const TestLivestream = () => {
     }
 
     // Gửi tín hiệu dừng
-    socketRef.current?.emit("stop-stream");
+    socketRef.current?.emit("stop-stream", user?._id);
     setIsLive(false);
   };
 
