@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { Send, Users, MessageSquare } from "lucide-react";
 import { useUserStore } from "../stores/useUserStore";
+import Peer from "peerjs";
 
 const TestLivestream = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -12,6 +13,7 @@ const TestLivestream = () => {
   const [chatInput, setChatInput] = useState("");
   const [viewerCount, setViewerCount] = useState(0);
   const { user } = useUserStore();
+  const peerRef = useRef<Peer | null>(null);
 
   // 1. Kết nối Socket khi component được mount
   useEffect(() => {
@@ -36,6 +38,29 @@ const TestLivestream = () => {
       socketRef.current?.disconnect();
     };
   }, []);
+
+  // Khởi tạo PeerJS cho Host
+  useEffect(() => {
+    if (!user || !socketRef.current) return;
+
+    // Tạo Peer với ID là user._id
+    const peer = new Peer(user._id);
+    peerRef.current = peer;
+
+    // Lắng nghe yêu cầu lấy video từ Viewer
+    socketRef.current.on("get-stream-request", ({ viewerPeerId }: { viewerPeerId: string }) => {
+      if (streamRef.current) {
+        console.log("Calling viewer:", viewerPeerId);
+        // Gọi tới Viewer và gửi luồng video
+        peer.call(viewerPeerId, streamRef.current);
+      }
+    });
+
+    return () => {
+      peer.destroy();
+      socketRef.current?.off("get-stream-request");
+    };
+  }, [user]);
 
   // 2. Hàm bắt đầu Livestream
   const startStream = async () => {

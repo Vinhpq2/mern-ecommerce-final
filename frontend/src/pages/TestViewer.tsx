@@ -3,10 +3,13 @@ import { io } from "socket.io-client";
 import { Send, MessageSquare, User } from "lucide-react";
 import { useUserStore } from "../stores/useUserStore";
 import { useParams } from "react-router-dom";
+import Peer from "peerjs";
 
 const TestViewer = () => {
   const { id } = useParams(); // Lấy ID từ URL (nếu có)
   const socketRef = useRef<any>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const peerRef = useRef<Peer | null>(null);
   const [messages, setMessages] = useState<{username: string, text: string}[]>([]);
   const [chatInput, setChatInput] = useState("");
   const [isLive, setIsLive] = useState(false);
@@ -16,6 +19,7 @@ const TestViewer = () => {
   const [roomId, setRoomId] = useState(id || ""); 
   // Nếu có ID thì coi như đã join (để hiện giao diện chat luôn)
   const [isJoined, setIsJoined] = useState(!!id); 
+  const [myPeerId, setMyPeerId] = useState("");
 
   useEffect(() => {
     // Kết nối tới server
@@ -43,7 +47,39 @@ const TestViewer = () => {
     return () => {
       socketRef.current?.disconnect();
     };
-  }, [id, user]); // Thêm dependencies
+  }, [id, user]);
+
+  // Khởi tạo PeerJS cho Viewer
+  useEffect(() => {
+    const peer = new Peer(); // Tạo ID ngẫu nhiên cho Viewer
+    peerRef.current = peer;
+
+    peer.on("open", (id) => {
+      setMyPeerId(id);
+    });
+
+    // Lắng nghe cuộc gọi từ Host
+    peer.on("call", (call) => {
+      call.answer(); // Chấp nhận cuộc gọi
+
+      // Lắng nghe luồng video
+      call.on("stream", (remoteStream) => {
+        if (videoRef.current) {
+          videoRef.current.srcObject = remoteStream;
+          videoRef.current.play().catch(e => console.error("Video play failed:", e));
+        }
+      });
+    });
+
+    return () => { peer.destroy(); };
+  }, []);
+
+  // Gửi yêu cầu xem video khi đã vào phòng và biết Host đang Live
+  useEffect(() => {
+    if (isJoined && isLive && myPeerId && socketRef.current) {
+      socketRef.current.emit("request-stream", { roomId, viewerPeerId: myPeerId });
+    }
+  }, [isJoined, isLive, myPeerId, roomId]);
 
   // Hàm tham gia phòng
   const handleJoinRoom = () => {
@@ -100,10 +136,13 @@ const TestViewer = () => {
         {/* Video Player Placeholder */}
         <div className="md:col-span-2 bg-black rounded-xl aspect-video flex items-center justify-center border border-gray-700 shadow-lg">
           {isLive ? (
-            <div className="text-center">
-              <p className="text-green-500 font-bold text-xl animate-pulse">🔴 Đang phát trực tiếp</p>
-              <p className="text-gray-400 text-sm mt-2">(Video sẽ hiển thị tại đây khi tích hợp WebRTC)</p>
-            </div>
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              controls
+              className="w-full h-full object-contain"
+            />
           ) : (
             <div className="text-center text-gray-500">
               <User size={48} className="mx-auto mb-2 opacity-50" />
