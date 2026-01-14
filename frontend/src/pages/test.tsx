@@ -13,7 +13,6 @@ const TestLivestream = () => {
   const [chatInput, setChatInput] = useState("");
   const [viewerCount, setViewerCount] = useState(0);
   const { user } = useUserStore();
-  const peerRef = useRef<Peer | null>(null);
 
   // 1. Kết nối Socket khi component được mount
   useEffect(() => {
@@ -43,11 +42,9 @@ const TestLivestream = () => {
   useEffect(() => {
     if (!user || !socketRef.current) return;
 
-    // Để PeerJS tự tạo ID ngẫu nhiên để tránh lỗi "ID taken" khi F5
-    const peer = new Peer();
+    // Tạo Peer với ID là user._id
+    const peer = new Peer(user._id);
     peerRef.current = peer;
-
-    peer.on('error', (err) => console.error('PeerJS Host Error:', err));
 
     // Lắng nghe yêu cầu lấy video từ Viewer
     socketRef.current.on("get-stream-request", ({ viewerPeerId }: { viewerPeerId: string }) => {
@@ -93,7 +90,7 @@ const TestLivestream = () => {
     }
   };
 
-  // 3. Hàm dừng Livestream
+  // 4. Hàm dừng Livestream
   const stopStream = () => {
     // Tắt camera/mic
     if (streamRef.current) {
@@ -110,7 +107,7 @@ const TestLivestream = () => {
     setIsLive(false);
   };
 
-  // 4. Gửi tin nhắn chat
+  // 5. Gửi tin nhắn chat
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
     if (!chatInput.trim()) return;
@@ -144,6 +141,11 @@ const TestLivestream = () => {
             {window.location.origin}/live/{user?._id}
           </code>
         </div>
+        {(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && (
+          <p className="text-red-400 text-xs mt-1 italic text-center">
+            ⚠️ Bạn đang dùng localhost. Người khác sẽ KHÔNG truy cập được link này.
+          </p>
+        )}
       </div>
       
       <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-3 gap-6">

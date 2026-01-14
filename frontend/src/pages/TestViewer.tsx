@@ -23,62 +23,66 @@ const TestViewer = () => {
 
   useEffect(() => {
     // Kết nối tới server
-    socketRef.current = io("https://novel-jamie-be-ecommerce-f1668421.koyeb.app/");
+    const socket = io("https://novel-jamie-be-ecommerce-f1668421.koyeb.app/");
+    socketRef.current = socket;
 
-    socketRef.current.on("connect", () => {
-      console.log("Viewer connected:", socketRef.current.id);
-      
-      // Nếu có ID từ URL, tự động join phòng ngay khi kết nối
-      if (id) {
-        const username = user?.name || `Guest_${Math.floor(Math.random() * 1000)}`;
-        socketRef.current.emit("join-room", { roomId: id, username });
-      }
-    });
-
-    // Lắng nghe tin nhắn
-    socketRef.current.on("chat-message", (data: {username: string, text: string}) => {
-      setMessages((prev) => [...prev, data]);
-    });
-
-    // Lắng nghe trạng thái stream (giả lập)
-    socketRef.current.on("stream-started", () => setIsLive(true));
-    socketRef.current.on("stream-ended", () => setIsLive(false));
-
-    return () => {
-      socketRef.current?.disconnect();
-    };
-  }, [id, user]);
-
-  // Khởi tạo PeerJS cho Viewer
-  useEffect(() => {
     const peer = new Peer(); // Tạo ID ngẫu nhiên cho Viewer
     peerRef.current = peer;
 
-    peer.on("open", (id) => {
-      setMyPeerId(id);
-    });
+    peer.on('error', (err) => console.error('❌ PeerJS Viewer Error:', err));
 
-    peer.on('error', (err) => console.error('PeerJS Viewer Error:', err));
+    peer.on("open", (peerId) => {
+      console.log("✅ Viewer: PeerJS đã sẵn sàng với ID:", peerId);
+      setMyPeerId(peerId);
+    });
 
     // Lắng nghe cuộc gọi từ Host
     peer.on("call", (call) => {
+      console.log("📞 Viewer: Nhận được cuộc gọi từ Host...");
       call.answer(); // Chấp nhận cuộc gọi
 
       // Lắng nghe luồng video
       call.on("stream", (remoteStream) => {
+        console.log("🎬 Viewer: Đã nhận được luồng video!");
         if (videoRef.current) {
           videoRef.current.srcObject = remoteStream;
-          videoRef.current.play().catch(e => console.error("Video play failed:", e));
+          videoRef.current.play().catch(e => console.error("Lỗi phát video:", e));
         }
       });
     });
 
-    return () => { peer.destroy(); };
-  }, []);
+    socket.on("connect", () => {
+      console.log("✅ Viewer: Đã kết nối tới Socket Server:", socket.id);
+      
+      // Nếu có ID từ URL, tự động join phòng ngay khi kết nối
+      if (id) {
+        const username = user?.name || `Guest_${Math.floor(Math.random() * 1000)}`;
+        socket.emit("join-room", { roomId: id, username });
+      }
+    });
+
+    // Lắng nghe tin nhắn
+    socket.on("chat-message", (data: {username: string, text: string}) => {
+      setMessages((prev) => [...prev, data]);
+    });
+
+    // Lắng nghe trạng thái stream (giả lập)
+    socket.on("stream-started", () => {
+      console.log("🟢 Viewer: Nhận được tín hiệu 'stream-started'.");
+      setIsLive(true);
+    });
+    socket.on("stream-ended", () => setIsLive(false));
+
+    return () => {
+      socket.disconnect();
+      peer.destroy();
+    };
+  }, [id, user]);
 
   // Gửi yêu cầu xem video khi đã vào phòng và biết Host đang Live
   useEffect(() => {
     if (isJoined && isLive && myPeerId && socketRef.current) {
+      console.log("🚀 Viewer: Gửi yêu cầu xem video tới Host...");
       socketRef.current.emit("request-stream", { roomId, viewerPeerId: myPeerId });
     }
   }, [isJoined, isLive, myPeerId, roomId]);
