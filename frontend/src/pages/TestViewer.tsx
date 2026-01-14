@@ -5,6 +5,11 @@ import { useUserStore } from "../stores/useUserStore";
 import { useParams } from "react-router-dom";
 import Peer from "peerjs";
 
+// Fix lỗi "global is not defined" gây trắng màn hình khi dùng PeerJS với Vite
+if (typeof global === "undefined") {
+  (window as any).global = window;
+}
+
 const TestViewer = () => {
   const { id } = useParams(); // Lấy ID từ URL (nếu có)
   const socketRef = useRef<any>(null);

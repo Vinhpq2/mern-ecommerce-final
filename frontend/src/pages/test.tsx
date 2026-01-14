@@ -4,60 +4,60 @@ import { Send, Users, MessageSquare } from "lucide-react";
 import { useUserStore } from "../stores/useUserStore";
 import Peer from "peerjs";
 
+// Fix lỗi "global is not defined" gây trắng màn hình khi dùng PeerJS với Vite
+if (typeof global === "undefined") {
+  (window as any).global = window;
+}
+
 const TestLivestream = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const socketRef = useRef<any>(null);
+  const peerRef = useRef<Peer | null>(null);
   const [isLive, setIsLive] = useState(false);
   const [messages, setMessages] = useState<{username: string, text: string}[]>([]);
   const [chatInput, setChatInput] = useState("");
   const [viewerCount, setViewerCount] = useState(0);
   const { user } = useUserStore();
 
-  // 1. Kết nối Socket khi component được mount
+  // 1. Kết nối Socket và PeerJS
   useEffect(() => {
-    // Lưu ý: Đổi URL này thành địa chỉ server backend thực tế của bạn
-    socketRef.current = io("https://novel-jamie-be-ecommerce-f1668421.koyeb.app/");
+    if (!user) return;
 
-    socketRef.current.on("connect", () => {
-      console.log("Connected to socket server:", socketRef.current.id);
-    });
+    // Init Socket
+    const socket = io("https://novel-jamie-be-ecommerce-f1668421.koyeb.app/");
+    socketRef.current = socket;
 
-    // Lắng nghe tin nhắn chat từ server
-    socketRef.current.on("chat-message", (data: {username: string, text: string}) => {
-      setMessages((prev) => [...prev, data]);
-    });
-
-    // Lắng nghe số lượng người xem
-    socketRef.current.on("viewer-update", (count: number) => {
-      setViewerCount(count);
-    });
-
-    return () => {
-      socketRef.current?.disconnect();
-    };
-  }, []);
-
-  // Khởi tạo PeerJS cho Host
-  useEffect(() => {
-    if (!user || !socketRef.current) return;
-
-    // Tạo Peer với ID là user._id
-    const peer = new Peer(user._id);
+    // Init Peer (Random ID để tránh lỗi trùng lặp)
+    const peer = new Peer();
     peerRef.current = peer;
 
-    // Lắng nghe yêu cầu lấy video từ Viewer
-    socketRef.current.on("get-stream-request", ({ viewerPeerId }: { viewerPeerId: string }) => {
+    peer.on('error', (err) => console.error('❌ PeerJS Host Error:', err));
+    peer.on('open', (id) => console.log('✅ Host Peer ID:', id));
+
+    // Socket Events
+    socket.on("connect", () => {
+      console.log("✅ Connected to socket server:", socket.id);
+    });
+
+    socket.on("get-stream-request", ({ viewerPeerId }: { viewerPeerId: string }) => {
       if (streamRef.current) {
-        console.log("Calling viewer:", viewerPeerId);
-        // Gọi tới Viewer và gửi luồng video
+        console.log("📞 Calling viewer:", viewerPeerId);
         peer.call(viewerPeerId, streamRef.current);
       }
     });
 
+    socket.on("chat-message", (data: {username: string, text: string}) => {
+      setMessages((prev) => [...prev, data]);
+    });
+
+    socket.on("viewer-update", (count: number) => {
+      setViewerCount(count);
+    });
+
     return () => {
+      socket.disconnect();
       peer.destroy();
-      socketRef.current?.off("get-stream-request");
     };
   }, [user]);
 
