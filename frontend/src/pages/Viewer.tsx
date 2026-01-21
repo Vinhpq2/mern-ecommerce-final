@@ -38,7 +38,7 @@ const Viewer = () => {
     peer.on('error', (err) => console.error('❌ PeerJS Viewer Error:', err));
 
     peer.on("open", (peerId) => {
-      console.log("✅ Viewer: PeerJS đã sẵn sàng với ID:", peerId);
+      console.log("✅ Viewer: PeerJS đã sẵn sàng với ID:1", peerId);
       setMyPeerId(peerId);
     });
 
