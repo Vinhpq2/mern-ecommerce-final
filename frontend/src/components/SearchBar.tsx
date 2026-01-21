@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Search, X } from 'lucide-react';
 import { useProductStore } from '../stores/useProductStore';
 import { Link } from 'react-router-dom';
+import {useLanguageStore} from "../stores/useLanguageStore";
 
 const SearchBar = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -9,6 +10,7 @@ const SearchBar = () => {
     const searchRef = useRef<HTMLDivElement>(null)
     const inputRef = useRef<HTMLInputElement>(null);
     const { fetchProductsBySearch, products } = useProductStore();
+    const {t} = useLanguageStore();
 
     // Debounce search: Chỉ gọi API sau khi ngừng gõ 500ms
     useEffect(() => {
@@ -73,7 +75,7 @@ const SearchBar = () => {
                     ref={inputRef}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Nhập từ khóa..."
+                    placeholder={t.searchText}
                     readOnly={!isOpen}
                     className={`w-full h-10 bg-gray-800 text-gray-100 placeholder-gray-400 px-4 py-2 pl-10 outline-none rounded-lg border border-gray-700 transition-colors ${
                         isOpen ? 'pr-12 focus:border-emerald-500' : 'cursor-pointer hover:border-emerald-500'
@@ -83,8 +85,6 @@ const SearchBar = () => {
                 {isOpen && (
                     <>
                         <button onClick={() => {
-                            // e.stopPropagation() không cần thiết ở đây vì logic đóng đã xử lý, 
-                            // nhưng thêm vào để tránh trigger click form nếu có logic khác
                             setIsOpen(false);
                             setSearchTerm('');
                         }}

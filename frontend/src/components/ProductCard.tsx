@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 
 
 const ProductCard = ({product}:{product: Product }) => {
+	console.log("111 product card rendered", product);
 	const {user} = useUserStore();
 	const { addToCart } = useCartStore();
 	const {t} = useLanguageStore();
@@ -22,15 +23,13 @@ const ProductCard = ({product}:{product: Product }) => {
 			return;
 		}
 		
-		// @ts-ignore - Kiểm tra an toàn với optional chaining (?.)
-		if (product.sizes?.length > 0 && !selectedSize) {
+		if (product.sizes && product.sizes.length > 0 && !selectedSize) {
 			toast.error("Vui lòng chọn kích thước", { id: "select-size" });
 			return;
 		}
 
 		// add to cart
-		// @ts-ignore
-		addToCart({ ...product, size: selectedSize || undefined });
+		addToCart({ ...product, size: selectedSize || undefined } as Product);
 	};
 
 	return (
@@ -47,7 +46,6 @@ const ProductCard = ({product}:{product: Product }) => {
 				</Link>
 				
 				{/* Hiển thị sizes nếu có */}
-				{/* @ts-ignore */}
 				{product.sizes && product.sizes.length > 0 && (
 					<div className="flex flex-wrap gap-1 mt-2 mb-2">
 

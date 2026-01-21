@@ -1,13 +1,14 @@
 export interface Cart {
     quantity: number;
-    createdAt: NativeDate;
-    updatedAt: NativeDate;
+    size: string;
+    createdAt: string;
+    updatedAt: string;
     name: string;
     description: string;
     price: number;
     image: string;
     category: string;
     isFeatured: boolean;
-    _id: Types.ObjectId;
+    _id: string;
     __v: number
 };

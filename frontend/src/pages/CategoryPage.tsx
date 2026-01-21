@@ -1,4 +1,4 @@
-import {useEffect} from 'react'
+import {useEffect, useState} from 'react'
 import {useProductStore} from "../stores/useProductStore";
 import {useParams} from "react-router-dom";
 import {motion} from "framer-motion";
@@ -7,9 +7,16 @@ import { useLanguageStore } from '../stores/useLanguageStore';
 const CategoryPage = () => {
     const {fetchProductsByCategory,products} = useProductStore();
     const {category} = useParams();
+    const [visibleCount, setVisibleCount] = useState(8); // Ban đầu hiển thị 8 sản phẩm
+
     useEffect(()=>{
         fetchProductsByCategory(category!);
+        setVisibleCount(8); // Reset lại khi đổi category
     },[category,fetchProductsByCategory]);
+
+    const handleLoadMore = () => {
+        setVisibleCount((prev) => prev + 4); // Tải thêm 4 sản phẩm
+    };
 
 	const {t} = useLanguageStore();
 
@@ -38,10 +45,22 @@ const CategoryPage = () => {
 						</h2>
 					)}
 
-					{products?.map((product) => (
+					{products?.slice(0, visibleCount).map((product) => (
 						<ProductCard key={product._id} product={product} />
 					))}
 				</motion.div>
+
+                {/* Nút Xem thêm */}
+                {products && products.length > visibleCount && (
+                    <div className="flex justify-center mt-8 pb-8">
+                        <button
+                            onClick={handleLoadMore}
+                            className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition-colors duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                        >
+                            Xem thêm
+                        </button>
+                    </div>
+                )}
 			</div>
 		</div>
 	);

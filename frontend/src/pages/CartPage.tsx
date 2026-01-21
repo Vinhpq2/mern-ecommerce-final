@@ -7,6 +7,7 @@ import PeopleAlsoBought from "../components/PeopleAlsoBought";
 import OrderSummary from "../components/OrderSummary";
 import GiftCouponCard from "../components/GiftCouponCard";
 import { useLanguageStore } from "../stores/useLanguageStore";
+import type { Cart } from "../types/cart";
 
 const CartPage = () => {
 	const { cart } = useCartStore();
@@ -44,9 +45,9 @@ const CartPage = () => {
 						{cart.length === 0 ? (
 							<EmptyCartUI />
 						) : (
-							<div className='space-y-6'>
-								{cart.map((item) => (
-									<CartItem key={item._id} item={item} />
+							<div className='space-y-6 lg:max-h-[60vh] lg:overflow-y-auto lg:pr-2 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-gray-800 [&::-webkit-scrollbar-thumb]:bg-gray-600 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-gray-500'>
+								{cart.map((item:Cart) => (
+									<CartItem key={`${item._id}-${item.size || 'nosize'}`} item={item} />
 								))}
 							</div>
 						)}
@@ -72,4 +73,3 @@ const CartPage = () => {
 	
 };
 export default CartPage;
-

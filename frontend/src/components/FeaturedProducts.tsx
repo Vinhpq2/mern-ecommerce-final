@@ -1,33 +1,14 @@
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
-import { useCartStore } from "../stores/useCartStore";
-import { useUserStore } from "../stores/useUserStore";
+import {ChevronLeft, ChevronRight } from "lucide-react";
+import { useLanguageStore } from "../stores/useLanguageStore";
+
 import type { Product } from "../types/product";
 import { Link } from "react-router-dom";
 
 const FeaturedProducts = ({ featuredProducts }: { featuredProducts: Product[] }) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [itemsPerPage, setItemsPerPage] = useState(4);
-
-	const { addToCart } = useCartStore();
-	const { user } = useUserStore();
-
-	const handleAddToCart = (product: Product) => {
-		if (!user) {
-			toast.error("Đăng nhập để thêm vào giỏ hàng", { id: "login" });
-            // {id:"login"} để chống spam thêm giỏ hàng hiển thị nhiều lần
-			return;
-		} else {
-			// @ts-ignore
-			if (product.sizes && product.sizes.length > 0) {
-				toast("Vui lòng chọn kích thước", { icon: "ℹ️", id:"select-size-featured" });
-				return;
-			}
-			// add to cart
-			addToCart(product);
-		}
-	};
+	const { t } = useLanguageStore();
 	useEffect(() => {
 		const handleResize = () => {
 			if (window.innerWidth < 640) setItemsPerPage(1);
@@ -55,7 +36,7 @@ const FeaturedProducts = ({ featuredProducts }: { featuredProducts: Product[] })
 	return (
 		<div className='py-12'>
 			<div className='container mx-auto px-4'>
-				<h2 className='text-center text-5xl sm:text-6xl font-bold text-emerald-400 mb-4'>Featured</h2>
+				<h2 className='text-center text-5xl sm:text-6xl font-bold text-emerald-400 mb-4'>{t.featured}</h2>
 				<div className='relative'>
 					<div className='overflow-hidden'>
 						<div
@@ -77,12 +58,9 @@ const FeaturedProducts = ({ featuredProducts }: { featuredProducts: Product[] })
 										<div className='p-4'>
 											<Link to={`/product/${product._id}`}>
 												<h3 className='text-lg font-semibold mb-2 text-white hover:text-emerald-400 transition-colors'>{product.name}</h3>
-											</Link>
-											
-											{/* @ts-ignore */}
+											</Link>							
 											{product.sizes && product.sizes.length > 0 && (
 												<div className="flex flex-wrap gap-1 mb-2">
-													{/* @ts-ignore */}
 													{product.sizes.slice(0, 3).map((size: string) => (
 														<span key={size} className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded border border-gray-600">
 															{size}
@@ -90,18 +68,10 @@ const FeaturedProducts = ({ featuredProducts }: { featuredProducts: Product[] })
 													))}
 												</div>
 											)}
-
 											<p className='text-emerald-300 font-medium mb-4'>
 												${Number(product.price).toFixed(2)}
 											</p>
-											<button
-												onClick={() => handleAddToCart(product)}
-												className='w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 px-4 rounded transition-colors duration-300 
-												flex items-center justify-center'
-											>
-												<ShoppingCart className='w-5 h-5 mr-2' />
-												Add to Cart
-											</button>
+										
 										</div>
 									</div>
 								</div>

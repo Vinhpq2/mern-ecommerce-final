@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 // 👇 Khai báo global type cho API aie_aic
 declare global {
@@ -51,6 +52,7 @@ declare global {
 const CameraAuthentication = () => {
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const navigate = useNavigate();
 
   // 🧠 Hàm load script động
   const loadScript = (src: string): Promise<boolean> => {
@@ -129,7 +131,7 @@ const CameraAuthentication = () => {
           console.log("Camera exited");
           stopAllCameras();
           setIsCameraOpen(false);
-          window.location.href = "/failed";
+          navigate("/");
         },
 
         location: true,
@@ -144,7 +146,9 @@ const CameraAuthentication = () => {
         console.log("📍 Location:", location);
         stopAllCameras();
         setIsCameraOpen(false);
-        window.location.href = "/success";
+        sessionStorage.setItem("isFaceAuthenticated", "true");
+        // Dùng window.location.href để reload trang, giúp xóa sạch overlay của camera
+        window.location.href = "/livestream";
       }
     );
   }

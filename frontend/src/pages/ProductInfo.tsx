@@ -4,6 +4,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useProductStore } from '../stores/useProductStore';
 import { useCartStore } from '../stores/useCartStore';
 import { useUserStore } from '../stores/useUserStore';
+import { useLanguageStore } from '../stores/useLanguageStore';
 import { ShoppingCart, Star, ArrowLeft } from 'lucide-react';
 import type { Product } from '../types/product';
 
@@ -13,6 +14,7 @@ const ProductInfo = () => {
     const { addToCart } = useCartStore();
     const {user} = useUserStore();
     const [selectedSize, setSelectedSize] = useState<string | null>(null);
+    const { t } = useLanguageStore();
 
     useEffect(() => {
         if (id) {
@@ -27,13 +29,11 @@ const ProductInfo = () => {
             // {id:"login"} để chống spam thêm giỏ hàng hiển thị nhiều lần
 			return;
 		} else {
-            // @ts-ignore - Kiểm tra nếu sản phẩm có size mà chưa chọn
             if (product.sizes && product.sizes.length > 0 && !selectedSize) {
                 toast.error("Vui lòng chọn kích thước", { id: "size-error" });
                 return;
             }
-			// add to cart
-            // @ts-ignore - Gửi kèm size đã chọn
+           // @ts-ignore
 			addToCart({ ...product, size: selectedSize });
 		}
 	};
@@ -85,12 +85,10 @@ const ProductInfo = () => {
                         </div>
 
                         {/* Hiển thị Size nếu có */}
-                        {/* @ts-ignore */}
                         {product.sizes && product.sizes.length > 0 && (
                             <div className='mt-4'>
                                 <h3 className='text-sm font-medium text-gray-300 mb-2'>Kích thước:</h3>
                                 <div className='flex flex-wrap gap-2'>
-                                    {/* @ts-ignore */}
                                     {product.sizes.map((size: string) => (
                                         <button
                                             key={size}
@@ -118,7 +116,7 @@ const ProductInfo = () => {
                                 className='flex-1 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-4 rounded-lg flex items-center justify-center gap-2 transition-colors font-bold text-lg shadow-lg shadow-emerald-900/20'
                             >
                                 <ShoppingCart size={24} />
-                                Thêm vào giỏ hàng
+                                {t.addToCart}
                             </button>
                         </div>
                     </div>

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Trash, Star, Edit } from "lucide-react";
 import { useProductStore } from "../stores/useProductStore";
+import { useLanguageStore} from "../stores/useLanguageStore";
 import { useState, useEffect } from "react";
 import EditProductForm from "./EditProductForm";
 import type { Product } from "../types/product";
@@ -12,6 +13,7 @@ const ProductsList = () => {
 	const [selectedId, setSelectedId] = useState<string | null>(null);
 	const [productToEdit, setProductToEdit] = useState<Product | null>(null);
 	const [activeCategory, setActiveCategory] = useState("all");
+	const { t } = useLanguageStore();
 
 	// Khóa cuộn trang body khi Modal Edit mở
 	useEffect(() => {
@@ -81,19 +83,19 @@ const ProductsList = () => {
 					<thead className='bg-gray-700'>
 						<tr>
 							<th className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'>
-								Product
+								{t.products}
 							</th>
 							<th className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'>
-								Price
+								{t.price}
 							</th>
 							<th className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'>
-								Category
+								{t.category}
 							</th>
 							<th className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'>
-								Featured
+								{t.featured}
 							</th>
 							<th className='px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider'>
-								Actions
+								{t.actions}
 							</th>
 						</tr>
 					</thead>
@@ -160,20 +162,20 @@ const ProductsList = () => {
 				<div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
 					<div className='bg-gray-800 rounded-lg p-6 shadow-lg max-w-sm w-full'>
 						<h2 className='text-lg font-semibold text-white mb-4'>
-							Bạn có chắc muốn xóa sản phẩm này?
+							{t.deleteProductText}
 						</h2>
 						<div className='flex justify-end gap-3'>
 							<button
 								onClick={() => setShowModal(false)}
 								className='px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500'
 							>
-								Hủy
+								{t.cancel}
 							</button>
 							<button
 								onClick={confirmDelete}
 								className='px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500'
 							>
-								Xóa
+								{t.delete}
 							</button>
 						</div>
 					</div>

@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {motion} from 'framer-motion';
 import {PlusCircle,Upload,Loader} from "lucide-react";
 import { useProductStore } from '../stores/useProductStore';
+import {useLanguageStore} from "../stores/useLanguageStore";
 import type { Product } from "../types/product";
 
 const categories = ["jeans","t-shirts","shoes","glasses","jackets","suits","bags"];
@@ -16,6 +17,7 @@ const CreateProductForm = () => {
         sizes:"",
     });
     
+    const {t} = useLanguageStore();
 
     const {createProduct,loading} = useProductStore();
     const handleSubmit :React.FormEventHandler<HTMLFormElement> = async (e) =>{
@@ -57,11 +59,11 @@ const CreateProductForm = () => {
    initial={{opacity:0,y:20}}
    animate={{opacity:1,y:0}}
    transition={{duration:0.8}}>
-    <h2 className="text-2xl font-semibold mb-6 text-emerald-300">Tạo sản phẩm mới</h2>
+    <h2 className="text-2xl font-semibold mb-6 text-emerald-300">{t.createProduct}</h2>
     <form onSubmit={handleSubmit} className="space-y-4">
         <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-300">
-                Tên sản phẩm
+                {t.productName}
             </label>
             <input 
             type="text"
@@ -74,7 +76,7 @@ const CreateProductForm = () => {
         </div>
         <div>
             <label htmlFor="description" className="block text-sm font-medium text-gray-300">
-                Mô tả sản phẩm
+                {t.descriptionProduct}
             </label>
             <textarea
             id="description"
@@ -88,7 +90,7 @@ const CreateProductForm = () => {
         </div>
          <div>
             <label htmlFor="price" className="block text-sm font-medium text-gray-300">
-                Giá cả
+                {t.price} ($)
             </label>
             <input
             type="number"
@@ -105,7 +107,7 @@ const CreateProductForm = () => {
         </div>
          <div>
             <label htmlFor="category" className="block text-sm font-medium text-gray-300">
-                Danh mục
+                {t.category}
             </label>
            <select 
             id="category"
@@ -115,7 +117,7 @@ const CreateProductForm = () => {
              className="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3
             text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
             required>
-            <option value="">Chọn 1 một danh mục</option>
+            <option value=""></option>
             {categories.map((category) =>(
                 <option key={category} value={category}>{category}</option>
             ))}
@@ -124,7 +126,7 @@ const CreateProductForm = () => {
 
         <div>
             <label htmlFor="sizes" className="block text-sm font-medium text-gray-300">
-                Kích thước (Size)
+                {t.pickSize}
             </label>
             <input 
             type="text"
@@ -133,7 +135,7 @@ const CreateProductForm = () => {
             onChange={(e)=>setNewProduct({...newProduct,sizes:e.target.value})}
             className="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 
             text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-            placeholder="Ví dụ: S, M, L hoặc 39, 40, 41 (Bỏ trống nếu không có)"/>
+            placeholder={t.sizePlaceholder}/>
         </div>
 
         <div className="mt-1 flex items-center">
@@ -143,9 +145,9 @@ const CreateProductForm = () => {
             className="cursor-pointer bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3
             text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
                 <Upload className="h-5 w-5 inline-block mr-2"/>
-                Chọn ảnh sản phẩm
+                {t.uploadImage}
             </label>
-            {newProduct.image && <span className="ml-3 text-sm text-gray-400">Tải ảnh thành công</span>}
+            {newProduct.image && <span className="ml-3 text-sm text-gray-400">{t.uploadSuccess}</span>}
         </div>
 
         <button 

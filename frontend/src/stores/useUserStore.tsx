@@ -16,6 +16,13 @@ type LoginPayload = {
   password: string;
 };
 
+type UpdatePayload = {
+  name: string;
+  currentPassword?: string;
+  newPassword?: string;
+  confirmNewPassword?: string;
+};
+
 export const useUserStore = create<UserStore>((set,get) => ({
   user: null,
   loading: false,
@@ -71,6 +78,19 @@ export const useUserStore = create<UserStore>((set,get) => ({
       toast.success(t.logoutSuccess,{id:"logout"});
     } catch {
       toast.error(t.logoutFailed,{id:"logout"});
+    }
+  },
+
+  updateUser: async (payload: UpdatePayload) => {
+    const { t } = useLanguageStore.getState();
+    set({ loading: true });
+    try {
+      const res = await axios.put("/users/profile", payload);
+      set({ user: res.data, loading: false });
+      toast.success(t.updateSuccess,{id:"update"});
+    } catch{
+      set({ loading: false });
+      toast.error(t.updateFailed,{id:"update"});
     }
   },
 

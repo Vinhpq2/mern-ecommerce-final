@@ -1,10 +1,11 @@
-import {ShoppingCart, UserPlus,LogIn,LogOut,Lock,Globe,ScrollText,Video,Store} from 'lucide-react';
+import {ShoppingCart, UserPlus,LogIn,LogOut,Lock,Globe,ScrollText,Video,Store, MonitorPlay} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import {useUserStore} from '../stores/useUserStore';
 import {useCartStore} from '../stores/useCartStore';
 import { useLanguageStore } from "../stores/useLanguageStore";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import LoginModal from './LoginModal';
 
 
 const Navbar = () => {
@@ -15,10 +16,21 @@ const Navbar = () => {
   const [videoOpen, setVideoOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
    const { t, lang, setLang } = useLanguageStore();
 
+  // Khóa cuộn trang khi modal mở
+  useEffect(() => {
+    if (isLoginModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [isLoginModalOpen]);
+
   return (
+    <>
     <header className="fixed top-0 left-0 w-full bg-gray-900 bg-opacity-90 backdrop-blur-md 
     shadow-lg z-40 transition-all duration-300 border-b border-emerald-800 overflow-visible">
       <div className="container mx-auto px-2 py-2 sm:px-4 sm:py-3">
@@ -71,7 +83,7 @@ const Navbar = () => {
           {user ? (
             <div className="relative group">
               <button
-                onClick={() => { setUserOpen(!userOpen); setVideoOpen(false); setLoginOpen(false); }}
+                onClick={() => { setVideoOpen(false); setLoginOpen(false); }}
                 aria-haspopup="true"
                 aria-expanded={userOpen}
                 className="bg-gray-700 hover:bg-gray-600 text-white py-1 px-3 sm:py-2 sm:px-4 rounded-md flex items-center transition duration-300 ease-in-out">
@@ -80,12 +92,15 @@ const Navbar = () => {
                 
               </button>
 
-              <div className={`absolute left-0 mt-2 w-fit bg-gray-800 rounded-md shadow-lg transition-all duration-150 z-50 ${userOpen || 'opacity-0 invisible'} group-hover:opacity-100 group-hover:visible transform -translate-y-1 group-hover:translate-y-0`}>
+              <div className={`absolute left-0 mt-2 w-fit bg-gray-800 rounded-md shadow-lg transition-all duration-150 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transform -translate-y-1 group-hover:translate-y-0`}>
                 <div className="px-4 py-2 text-sm text-gray-300 border-b border-gray-700">
                   <div className="truncate">{user.email}</div>
                 </div>
                 <Link to="/profile" onClick={() => setUserOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-gray-700 text-white">
-                  <UserPlus size={16} /> {t.profile ?? "Profile"}
+                  <UserPlus size={16} /> {t.profile}
+                </Link>
+                <Link to="/viewer" onClick={() => setUserOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-gray-700 text-white">
+                  <MonitorPlay size={16} /> {t.room}
                 </Link>
                 <button
                   onClick={() => { logout(); setUserOpen(false); }}
@@ -99,21 +114,29 @@ const Navbar = () => {
             (
               <>
             <div className="relative group">
+              {/* Nút này sẽ mở Modal trên mobile, và dropdown trên desktop */}
               <button
-                onClick={() => { setLoginOpen(!loginOpen); setVideoOpen(false); setUserOpen(false); }}
+                onClick={() => {
+                  if (window.innerWidth < 1024) { // lg breakpoint
+                    setIsLoginModalOpen(true);
+                  } else {
+                    setLoginOpen(!loginOpen); setVideoOpen(false); setUserOpen(false);
+                  }
+                }}
                 aria-haspopup="true"
                 aria-expanded={loginOpen}
                 className="bg-emerald-600 hover:bg-emerald-700 text-white py-1 px-3 sm:py-2 sm:px-4 rounded-md 
                 flex items-center transition duration-300 ease-in-out">
                 <UserPlus className="mr-2" size={18} />
-                <span className="hidden lg:inline">{t.login}</span>
+                <span className="lg:inline">{t.login}</span>
               </button>
 
-              <div className={`absolute left-0 mt-2 w-fit bg-gray-800 rounded-md shadow-lg transition-all duration-150 z-50 ${loginOpen || 'opacity-0 invisible'} group-hover:opacity-100 group-hover:visible transform -translate-y-1 group-hover:translate-y-0`}>
-                <Link to="/login" onClick={() => setLoginOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-emerald-700 text-white rounded-b-md">
+              {/* Dropdown chỉ hiển thị trên màn hình lớn */}
+              <div className={`hidden lg:block absolute left-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg transition-all duration-150 z-50 ${loginOpen || 'opacity-0 invisible'} group-hover:opacity-100 group-hover:visible transform -translate-y-1 group-hover:translate-y-0`}>
+                <Link to="/login" onClick={() => setLoginOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-gray-700 text-white">
                   <LogIn size={16} /> {t.login}
                 </Link>
-                <Link to="/signup" onClick={() => setLoginOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-emerald-700 text-white rounded-b-md">
+                <Link to="/signup" onClick={() => setLoginOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-gray-700 text-white rounded-b-md">
                   <UserPlus size={16} /> {t.signup}
                 </Link>
               </div>
@@ -132,7 +155,10 @@ const Navbar = () => {
       </div>
     </div>
   </header>
-
+  
+  {/* Modal đăng nhập/đăng ký cho mobile */}
+  {isLoginModalOpen && <LoginModal onClose={() => setIsLoginModalOpen(false)} />}
+  </>
   )
 }
 export default Navbar

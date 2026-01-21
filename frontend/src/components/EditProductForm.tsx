@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { X, Save, Upload } from "lucide-react";
 import { useProductStore } from "../stores/useProductStore";
+import {useLanguageStore} from "../stores/useLanguageStore";
 import type { Product } from "../types/product";
 // Định nghĩa kiểu dữ liệu cơ bản cho props (hoặc import từ types nếu có)
 
@@ -23,6 +24,7 @@ const EditProductForm = ({ product, onClose }: EditProductFormProps) => {
 	
 	const { updateProduct } = useProductStore();
 
+	const { t } = useLanguageStore();
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setLoading(true);
@@ -69,11 +71,11 @@ const EditProductForm = ({ product, onClose }: EditProductFormProps) => {
 				<X size={24} />
 			</button>
 
-			<h2 className='text-2xl font-bold text-emerald-400 mb-6'>Edit Product</h2>
+			<h2 className='text-2xl font-bold text-emerald-400 mb-6'>{t.editProduct}</h2>
 
 			<form onSubmit={handleSubmit} className='space-y-4'>
 				<div>
-					<label className='block text-sm font-medium text-gray-300 mb-1'>Product Name</label>
+					<label className='block text-sm font-medium text-gray-300 mb-1'>{t.productName}</label>
 					<input
 						type='text'
 						value={formData.name}
@@ -85,7 +87,7 @@ const EditProductForm = ({ product, onClose }: EditProductFormProps) => {
 
 				<div className='grid grid-cols-2 gap-4'>
 					<div>
-						<label className='block text-sm font-medium text-gray-300 mb-1'>Price ($)</label>
+						<label className='block text-sm font-medium text-gray-300 mb-1'>{t.price} ($)</label>
 						<input
 							type='number'
 							value={formData.price}
@@ -97,7 +99,7 @@ const EditProductForm = ({ product, onClose }: EditProductFormProps) => {
 						/>
 					</div>
 					<div>
-						<label className='block text-sm font-medium text-gray-300 mb-1'>Category</label>
+						<label className='block text-sm font-medium text-gray-300 mb-1'>{t.category}</label>
 						<select
 							value={formData.category}
 							onChange={(e) => setFormData({ ...formData, category: e.target.value })}
@@ -115,7 +117,7 @@ const EditProductForm = ({ product, onClose }: EditProductFormProps) => {
 				</div>
 
 				<div>
-					<label className='block text-sm font-medium text-gray-300 mb-1'>Sizes (comma separated)</label>
+					<label className='block text-sm font-medium text-gray-300 mb-1'>{t.pickSize}</label>
 					<input
 						type='text'
 						placeholder="e.g. S, M, L or 38, 39, 40"
@@ -123,11 +125,11 @@ const EditProductForm = ({ product, onClose }: EditProductFormProps) => {
 						onChange={(e) => setFormData({ ...formData, sizes: e.target.value })}
 						className='w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500'
 					/>
-					<p className="text-xs text-gray-400 mt-1">Leave empty if the product has no sizes.</p>
+					<p className="text-xs text-gray-400 mt-1">{t.sizePlaceholder}</p>
 				</div>
 
 				<div>
-					<label className='block text-sm font-medium text-gray-300 mb-1'>Description</label>
+					<label className='block text-sm font-medium text-gray-300 mb-1'>{t.descriptionProduct}</label>
 					<textarea
 						value={formData.description}
 						onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -137,11 +139,10 @@ const EditProductForm = ({ product, onClose }: EditProductFormProps) => {
 				</div>
 
 				<div>
-					<label className='block text-sm font-medium text-gray-300 mb-1'>Product Image</label>
 					<div className="flex items-center gap-2">
 						<input type="file" id="edit-image" className="sr-only" accept="image/*" onChange={handleImageChange} />
 						<label htmlFor='edit-image' className="cursor-pointer bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white hover:bg-gray-600 flex items-center">
-							<Upload className="h-4 w-4 mr-2"/> Change Image
+							<Upload className="h-4 w-4 mr-2"/> {t.uploadImage}
 						</label>
 					</div>
 					{formData.image && <img src={formData.image} alt="Preview" className="mt-2 h-20 w-20 object-cover rounded" />}
@@ -157,7 +158,7 @@ const EditProductForm = ({ product, onClose }: EditProductFormProps) => {
 					) : (
 						<Save size={20} className="mr-2" />
 					)}
-					Save Changes
+					{t.save}
 				</button>
 			</form>
 		</div>

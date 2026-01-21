@@ -19,8 +19,15 @@ export const languages: { [lang: string]: {
     noAccount:string;
     loginHere:string;
     signupHere:string;
+    searchText:string;
+    startLive:string,
+    stopLive:string,
     loading:string;
     dashboard:string;
+    editProduct:string;
+    category:string;
+    productName:string;
+    pickSize:string;
     chooseQuantity:string;
     noProductsFound:string;
     emptyCart:string;
@@ -39,7 +46,12 @@ export const languages: { [lang: string]: {
     invalid:string;
     adminDashboard:string;
     createProduct:string;
+    descriptionProduct:string;
     products:string;
+    featured:string;
+    actions:string;
+    sizePlaceholder:string;
+    uploadImage:string;
     analytic:string;
     videoConsole:string;
     totalUsers:string;
@@ -50,12 +62,16 @@ export const languages: { [lang: string]: {
     revenue:string;
     processing:string;
     orderSummary:string;
+    price:string;
     originalPrice:string;
     total:string;
     subTotal:string;
     savings:string;
     continueShopping:string;
     applyCode:string;
+    deleteProductText:string;
+    cancel:string;
+    delete:string;
     purchaseCancel:string;
     purchaseCancelTitle:string;
     purchaseCancelContact:string;
@@ -75,6 +91,19 @@ export const languages: { [lang: string]: {
     alertDiscardVideo:string;
     uploadSuccess:string;
     loadingUploadVideo:string;
+    save:string;
+    createGift:string;
+    currentPassword_text:string;
+    newPassword_text:string;
+    changePassword_text:string;
+    room:string;
+    nameRequired:string;
+    emailRequired:string;
+    passwordRequired:string;
+    passwordTooShort:string;
+    currentPasswordIncorrect:string;
+    updateSuccess:string;
+    updateFailed:string;
 } } = {
   en: {
     home:"Home",
@@ -97,6 +126,9 @@ export const languages: { [lang: string]: {
     noAccount:"Don't have a account ?",
     loginHere:"Login here",
     signupHere:"Signup here",
+    searchText:"Search...",
+    startLive:"Start livestream",
+    stopLive:"Stop livestream",
     loading:"Loading...",
     dashboard:"Dashboard",
     chooseQuantity:"Choose quantity",
@@ -116,8 +148,17 @@ export const languages: { [lang: string]: {
     wrongPassword:"Passwords do not match",
     invalid:"Invalid email or password",
     adminDashboard:"Admin Dashboard",
+    editProduct:"Edit Product",
+    category:"Category",
+    productName:"Product Name",
+    pickSize:"Sizes (comma separated)",
     createProduct:"Create Product",
+    descriptionProduct:"Description",
     products:"Products",
+    featured:"Featured",
+    actions:"Actions",
+    sizePlaceholder:"E.g., S, M, L or 39, 40, 41 (Leave blank if none)",
+    uploadImage:"Upload Product Image",
     analytic:"Analytics",
     videoConsole:"Video Console",
     totalUsers:"Total Users",
@@ -128,12 +169,16 @@ export const languages: { [lang: string]: {
     revenue:"Revenue",
     processing:"Processing...",
     orderSummary:"Order Summary",
+    price:"Price",
     originalPrice:"Original Price",
     total:"Total",
     subTotal:"Subtotal",
     savings:"Savings",
     continueShopping:"Continue Shopping",
     applyCode:"Apply Code",
+    deleteProductText:"Are you sure you want to delete this product?",
+    cancel:"Cancel",
+    delete:"Delete",  
     purchaseCancel:"Purchase Cancelled",
     purchaseCancelTitle:"Your order has been cancelled. No charges have been made.",
     purchaseCancelContact:"If you encountered any issues during the checkout process, please don't hesitate to contact our support team.",
@@ -153,6 +198,19 @@ export const languages: { [lang: string]: {
     alertDiscardVideo:"Are you sure you want to discard this video?",
     uploadSuccess:"Video uploaded successfully",
     loadingUploadVideo:"Uploading video...",
+    save:"Save",
+    createGift:"Create Gift",
+    currentPassword_text:"Current Password",
+    newPassword_text:"New Password",
+    changePassword_text:"Change Password",
+    room:"Room",
+    nameRequired:"Name is required",
+    emailRequired:"Email is required",
+    passwordRequired:"Password is required",
+    passwordTooShort:"Password must be at least 6 characters",
+    currentPasswordIncorrect:"Current password incorrect",
+    updateSuccess:"Profile updated successfully",
+    updateFailed:"Update failed",
   },
   vi: {
     home:"Trang chủ",
@@ -174,8 +232,15 @@ export const languages: { [lang: string]: {
     noAccount:"Chưa có tài khoản ?",
     loginHere:"Đăng nhập tại đây",
     signupHere:"Đăng ký tại đây",
+    searchText:"Tìm kiếm...",
+    startLive:"Bắt đầu livestream",
+    stopLive:"Dừng livestream",
     loading:"Đang tải...",
     dashboard:"Bảng điều khiển",
+    editProduct:"Chỉnh sửa sản phẩm",
+    category:"Danh mục",
+    productName:"Tên sản phẩm",
+    pickSize:"Kích thước (phân cách bằng dấu phẩy)",
     chooseQuantity:"Chọn số lượng",
     logout:"Đăng xuất",
     noProductsFound:"Không tìm thấy sản phẩm nào",
@@ -195,7 +260,12 @@ export const languages: { [lang: string]: {
     invalid:"Email hoặc mật khẩu không đúng",
     adminDashboard:"Bảng điều khiển quản trị",
     createProduct:"Tạo sản phẩm",
+    descriptionProduct:"Mô tả sản phẩm",
     products:"Sản phẩm",
+    featured:"Nổi bật",
+    actions:"Hành động",
+    sizePlaceholder:"Ví dụ: S, M, L hoặc 39, 40, 41 (Bỏ trống nếu không có)",
+    uploadImage:"Tải ảnh sản phẩm",
     videoConsole:"Video ",
     analytic:"Phân tích",
     totalUsers:"Tổng người dùng",
@@ -206,12 +276,16 @@ export const languages: { [lang: string]: {
     revenue:"Doanh thu",
     processing:"Đang xử lý...",
     orderSummary:"Tóm tắt đơn hàng",
+    price:"Giá",
     originalPrice:"Giá gốc",
     total:"Tổng cộng",
     subTotal:"Tạm tính",
     savings:"Tiết kiệm",
     continueShopping:"Tiếp tục mua sắm",
     applyCode:"Áp dụng mã",
+    deleteProductText:"Bạn có chắc muốn xóa sản phẩm này?",
+    cancel:"Hủy",
+    delete:"Xóa",
     purchaseCancel:"Đơn hàng đã bị hủy",
     purchaseCancelTitle:"Đơn hàng của bạn đã bị hủy. Không có khoản phí nào được áp dụng.",
     purchaseCancelContact:"Nếu bạn gặp bất kỳ vấn đề nào trong quá trình thanh toán, vui lòng liên hệ với đội ngũ hỗ trợ của chúng tôi.",
@@ -229,8 +303,20 @@ export const languages: { [lang: string]: {
     uploadVideo:"Tải video lên",
     discardVideo:"Hủy",
     alertDiscardVideo:"Bạn thực sự muốn hủy video này?",
-    uploadSuccess:"Tải video lên thành công",
+    uploadSuccess:"Tải lên thành công",
     loadingUploadVideo:"Đang tải video lên...",
-
+    save:"Lưu",
+    createGift:"Tạo Gift",
+    currentPassword_text:"Mật khẩu hiện tại",
+    newPassword_text:"Mật khẩu mới",
+    changePassword_text:"Đổi mật khẩu",
+    room:"Phòng",
+    nameRequired:"Vui lòng nhập tên",
+    emailRequired:"Vui lòng nhập email",
+    passwordRequired:"Vui lòng nhập mật khẩu",
+    passwordTooShort:"Mật khẩu phải có ít nhất 6 ký tự",
+    currentPasswordIncorrect:"Mật khẩu hiện tại không đúng",
+    updateSuccess:"Cập nhật thông tin thành công",
+    updateFailed:"Cập nhật thất bại",
   },
 };

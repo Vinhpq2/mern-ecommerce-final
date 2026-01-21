@@ -10,15 +10,16 @@ if (typeof global === "undefined") {
   (window as any).global = window;
 }
 
-const TestViewer = () => {
+const Viewer = () => {
   const { id } = useParams(); // Lấy ID từ URL (nếu có)
   const socketRef = useRef<any>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const peerRef = useRef<Peer | null>(null);
-  const [messages, setMessages] = useState<{username: string, text: string}[]>([]);
+  const [messages, setMessages] = useState<{username: string, text: string, isHost?: boolean}[]>([]);
   const [chatInput, setChatInput] = useState("");
   const [isLive, setIsLive] = useState(false);
   const { user } = useUserStore();
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   
   // Nếu có ID trên URL thì dùng luôn, không thì để trống
   const [roomId, setRoomId] = useState(id || ""); 
@@ -28,7 +29,7 @@ const TestViewer = () => {
 
   useEffect(() => {
     // Kết nối tới server
-    const socket = io("https://novel-jamie-be-ecommerce-f1668421.koyeb.app/");
+    const socket = io(import.meta.env.MODE === "development" ? "http://localhost:5000" : "https://novel-jamie-be-ecommerce-f1668421.koyeb.app/");
     socketRef.current = socket;
 
     const peer = new Peer(); // Tạo ID ngẫu nhiên cho Viewer
@@ -67,7 +68,7 @@ const TestViewer = () => {
     });
 
     // Lắng nghe tin nhắn
-    socket.on("chat-message", (data: {username: string, text: string}) => {
+    socket.on("chat-message", (data: {username: string, text: string, isHost?: boolean}) => {
       setMessages((prev) => [...prev, data]);
     });
 
@@ -83,6 +84,11 @@ const TestViewer = () => {
       peer.destroy();
     };
   }, [id, user]);
+
+  // Tự động cuộn xuống tin nhắn mới nhất
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   // Gửi yêu cầu xem video khi đã vào phòng và biết Host đang Live
   useEffect(() => {
@@ -164,7 +170,7 @@ const TestViewer = () => {
         </div>
 
         {/* Chat Box */}
-        <div className="bg-gray-800 rounded-xl border border-gray-700 flex flex-col h-[400px] md:h-auto shadow-xl">
+        <div className="bg-gray-800 rounded-xl border border-gray-700 flex flex-col h-[500px] shadow-xl">
           <div className="p-3 border-b border-gray-700 bg-gray-800 rounded-t-xl">
             <h2 className="font-bold flex items-center gap-2 text-sm">
               <MessageSquare size={18} className="text-blue-400" /> 
@@ -172,15 +178,17 @@ const TestViewer = () => {
             </h2>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-3 space-y-2 scrollbar-thin scrollbar-thumb-gray-600">
+          <div className="flex-1 overflow-y-auto p-3 space-y-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-600 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-gray-500">
             {messages.map((msg, idx) => (
               <div key={idx} className="bg-gray-700/30 p-2 rounded text-sm">
-                <span className={`font-bold ${msg.username === 'Host' ? 'text-purple-400' : 'text-blue-400'}`}>
+                {/* Kiểm tra isHost để đổi màu */}
+                <span className={`font-bold ${msg.isHost ? 'text-purple-400' : 'text-blue-400'}`}>
                   {msg.username}:
                 </span>
                 <span className="text-gray-300 ml-1">{msg.text}</span>
               </div>
             ))}
+            <div ref={messagesEndRef} />
           </div>
 
           <form onSubmit={handleSendMessage} className="p-2 border-t border-gray-700">
@@ -200,4 +208,4 @@ const TestViewer = () => {
   );
 };
 
-export default TestViewer;
+export default Viewer;
