@@ -57,7 +57,7 @@ app.use("/api/users",userRoute);
 
 server.listen(PORT,()=> {
     console.log("Server is running on http://localhost:"+ PORT);
-    console.log(`🌐 Public URL: ${process.env.PUBLIC_URL || process.env.RAILWAY_STATIC_URL || process.env.RAILWAY_PUBLIC_DOMAIN || "localhost:" + PORT}`);
+    console.log(`🌐 Public URL: ${process.env.RAILWAY_PUBLIC_DOMAIN || process.env.RAILWAY_STATIC_URL || process.env.RAILWAY_PUBLIC_DOMAIN || "localhost:" + PORT}`);
     connectDB();
 });
  
