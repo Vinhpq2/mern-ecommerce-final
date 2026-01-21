@@ -35,7 +35,7 @@ const Livestream = () => {
     if (!user) return;
 
     // Init Socket
-    const socket = io(import.meta.env.MODE === "development" ? "http://localhost:5000" : "https://novel-jamie-be-ecommerce-f1668421.koyeb.app/");
+    const socket = io(import.meta.env.MODE === "development" ? "http://localhost:5000" : "https://mern-ecommerce-final-production.up.railway.app/");
     socketRef.current = socket;
 
     // Init Peer (Random ID để tránh lỗi trùng lặp)
