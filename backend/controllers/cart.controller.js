@@ -2,14 +2,21 @@ import Product from '../models/product.model.js';
 
 export const getCartProducts = async (req, res) => {
 	try {
-		const products = await Product.find({ _id: { $in: req.user.cartItems } });
+		// Lấy danh sách ID sản phẩm từ giỏ hàng (item.product là ID tham chiếu)
+		const products = await Product.find({ _id: { $in: req.user.cartItems.map(item => item.product) } });
 
-		// add quantity for each product
-		const cartItems = products.map((product) => {
-			const item = req.user.cartItems.find((cartItem) => cartItem.id === product.id);
-			return { ...product.toJSON(), quantity: item.quantity};
-		});
-		res.json(cartItems);
+		// Map dữ liệu: Duyệt qua cartItems của user để giữ đúng từng dòng (item) với size riêng biệt
+		const finalCartItems = req.user.cartItems.map(cartItem => {
+			const product = products.find(p => cartItem.product && p._id.toString() === cartItem.product.toString());
+			if (!product) return null;
+			return {
+				...product.toJSON(),
+				quantity: cartItem.quantity,
+				size: cartItem.size // Trả về size để frontend hiển thị
+			};
+		}).filter(Boolean);
+
+		res.json(finalCartItems);
 	} catch (error) {
 		console.log("Error in getCartProducts controller", error.message);
 		res.status(500).json({ message: "Server error", error: error.message });
@@ -17,14 +24,15 @@ export const getCartProducts = async (req, res) => {
 };
 export const addToCart = async(req, res) => {
     try{
-    const  {productId}  = req.body;
+    const  {productId, size}  = req.body;
     const user = req.user;
 
-    const existingItem = user.cartItems.find((item) => item?.id === productId);
+    // Kiểm tra sản phẩm trùng cả ID và Size
+    const existingItem = user.cartItems.find((item) => item.product && item.product.toString() === productId && item.size === size);
     if(existingItem)
         existingItem.quantity += 1;
     else
-        user.cartItems.push(productId);
+        user.cartItems.push({ product: productId, quantity: 1, size: size });
 
     await user.save();
     res.json(user.cartItems);
@@ -38,19 +46,19 @@ export const addToCart = async(req, res) => {
 
 export const removeAllFromCart = async (req, res) =>{
     try{
-        const { productId } = req.body;
+        const { productId, size } = req.body;
 
         const user = req.user;
         if(!productId){
-             user.cart = [];
+             user.cartItems = [];
         }else{
-            user.cartItems = user.cartItems.filter(item => item?.id !== productId);
+            // Xóa item khớp cả ID và Size
+            user.cartItems = user.cartItems.filter(item => item.product && !(item.product.toString() === productId && item.size === size));
         }
     
     
         await user.save();
         res.json(user.cartItems);
-        res.json({message:"All items removed from cart"});
     }
     catch(error) {
         console.log("Error in removeAllFromCart controller; ", error.message);
@@ -61,13 +69,15 @@ export const removeAllFromCart = async (req, res) =>{
 export const updateQuantity = async (req, res) => {
     try {
         const {id:productId} = req.params;
-        const {quantity} = req.body;
+        const {quantity, size} = req.body;
         const user = req.user;
-        const existingItem = user.cartItems.find(item => item?.id === productId);
+        
+        // Tìm item khớp cả ID và Size
+        const existingItem = user.cartItems.find(item => item.product && item.product.toString() === productId && item.size === size);
         
         if(existingItem){
             if(quantity === 0){
-                user.cartItems = user.cartItems.filter(item => item.id !== productId);
+                user.cartItems = user.cartItems.filter(item => item.product && !(item.product.toString() === productId && item.size === size));
                 await user.save();
                 return res.json(user.cartItems);
             }
@@ -96,4 +106,3 @@ export const removeUserCart = async (req, res) => {
             res.status(500).json({ message: "Server error", error: error.message });
         }
 }
-

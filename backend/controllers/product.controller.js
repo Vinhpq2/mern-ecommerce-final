@@ -144,7 +144,9 @@ export const getRecommendedProducts = async (req, res) => {
                     name: 1,
                     price: 1,
                     image: 1,
-                    description: 1
+                    description: 1,
+					category: 1,
+					sizes: 1
                 }
             }])
 

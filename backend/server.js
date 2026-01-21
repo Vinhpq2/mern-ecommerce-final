@@ -9,6 +9,7 @@ import couponRouters from "./routes/coupon.route.js";
 import paymentRouters from "./routes/payment.route.js";
 import analyticsRoutes from "./routes/analytics.route.js";
 import videoRouters from "./routes/video.router.js";
+import userRoute from "./routes/user.route.js";
 import cookieParser from 'cookie-parser';
 import { connectDB } from "./lib/db.js";
 import cors from "cors";
@@ -19,12 +20,6 @@ dotenv.config()
  // allow json data to be sent in the request body
 const app = express();
 const server = http.createServer(app);
-
-// Middleware log request để debug trên Koyeb
-app.use((req, res, next) => {
-  console.log(`[REQUEST] ${req.method} ${req.url} - IP: ${req.ip}`);
-  next();
-});
 
 // Khởi tạo Socket.io từ file riêng
 initializeSocket(server);
@@ -54,6 +49,7 @@ app.use("/api/cart",cartRouters);
 app.use("/api/coupons",couponRouters);
 app.use("/api/payments",paymentRouters);
 app.use("/api/analytics",analyticsRoutes);
+app.use("/api/users",userRoute);
 
 
 
@@ -61,7 +57,7 @@ app.use("/api/analytics",analyticsRoutes);
 
 server.listen(PORT,()=> {
     console.log("Server is running on http://localhost:"+ PORT);
-    console.log(`🌐 Public URL: ${process.env.RAILWAY_STATIC_URL || process.env.RAILWAY_PUBLIC_DOMAIN || "localhost:" + PORT}`);
+    console.log(`🌐 Public URL: ${process.env.PUBLIC_URL || process.env.RAILWAY_STATIC_URL || process.env.RAILWAY_PUBLIC_DOMAIN || "localhost:" + PORT}`);
     connectDB();
 });
  

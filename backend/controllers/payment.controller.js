@@ -1,5 +1,6 @@
 import Coupon from "../models/coupon.model.js";
 import Order from "../models/order.model.js";
+import User from "../models/user.model.js";
 import { stripe } from "../lib/stripe.js";
 import dotenv from "dotenv";
 dotenv.config();
@@ -39,9 +40,6 @@ export const createCheckoutSession = async (req, res) => {
 			}
 		}
 		console.log("Total Amount (in cents):", totalAmount);
-		if (totalAmount >= 20000) {
-			await createNewCoupon(req.user._id);
-		}
 
 		const session = await stripe.checkout.sessions.create({
 			payment_method_types: ["card"],
@@ -59,13 +57,6 @@ export const createCheckoutSession = async (req, res) => {
 			metadata: {
 				userId: req.user._id.toString(),
 				couponCode: couponCode || "",
-				products: JSON.stringify(
-					products.map((p) => ({
-						id: p._id,
-						quantity: p.quantity,
-						price: p.price,
-					}))
-				),
 			},
 		});
 
@@ -84,30 +75,52 @@ export const checkoutSuccess = async (req, res) => {
 
 		if (session.payment_status === "paid") {
 			if (session.metadata.couponCode) {
-				await Coupon.findOneAndUpdate(
-					{
-						code: session.metadata.couponCode,
-						userId: session.metadata.userId,
-					},
-					{
-						isActive: false,
+				const coupon = await Coupon.findOne({ code: session.metadata.couponCode });
+				if (coupon) {
+					// Nếu là coupon livestream (có giới hạn số lượng)
+					if (coupon.usageLimit !== null) {
+						// Sử dụng $inc để tăng usageCount một cách nguyên tử (Atomic Update)
+						// Giúp tránh lỗi Race Condition khi nhiều người thanh toán cùng lúc
+						const updatedCoupon = await Coupon.findByIdAndUpdate(
+							coupon._id,
+							{ $inc: { usageCount: 1 } },
+							{ new: true }
+						);
+
+						// Nếu đã dùng hết lượt thì mới tắt
+						if (updatedCoupon.usageCount >= updatedCoupon.usageLimit) {
+							await Coupon.findByIdAndUpdate(coupon._id, { isActive: false });
+						}
+					} else {
+						// Nếu là coupon cá nhân (không có limit) -> Dùng xong tắt luôn
+						await Coupon.findByIdAndUpdate(coupon._id, { isActive: false });
 					}
-				);
+				}
 			}
 
-			// create a new Order
-			const products = JSON.parse(session.metadata.products);
+			// Lấy thông tin User và giỏ hàng hiện tại để tạo đơn hàng
+			// Thay vì lấy từ metadata (bị giới hạn ký tự), ta lấy trực tiếp từ DB
+			const user = await User.findById(session.metadata.userId).populate("cartItems.product");
+			
+			if (!user) {
+				return res.status(404).json({ message: "User not found" });
+			}
+
+			const products = user.cartItems
+				.filter(item => item.product) // Lọc bỏ sản phẩm null (đã bị xóa khỏi DB)
+				.map((item) => ({
+					product: item.product._id,
+					quantity: item.quantity,
+					price: item.product.price, // Lấy giá hiện tại từ DB
+					size: item.size || ""
+				}));
+
 			const newOrder = new Order({
 				user: session.metadata.userId,
-				products: products.map((product) => ({
-					product: product.id,
-					quantity: product.quantity,
-					price: product.price,
-				})),
+				products: products,
 				totalAmount: session.amount_total / 100, // convert from cents to dollars,
 				stripeSessionId: sessionId,
 			});
-
 			await newOrder.save();
 
 			res.status(200).json({

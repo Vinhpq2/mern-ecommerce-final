@@ -110,7 +110,7 @@ export const logout = async(req,res)=>{
         res.json({message:"Logout successfully"})
     }
     catch(error){
-        res.status(500).json({message:"Server error",error1:error.message})
+        res.status(500).json({message:"Server error",error:error.message})
     }
 }
 

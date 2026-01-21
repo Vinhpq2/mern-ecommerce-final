@@ -45,9 +45,9 @@ export const initializeSocket = (httpServer) => {
     });
 
     // 3. Chat
-    socket.on("send-message", ({ roomId, message, username }) => {
+    socket.on("send-message", ({ roomId, message, username, isHost }) => {
       // Gửi cho người khác trong phòng (trừ người gửi)
-      socket.to(roomId).emit("chat-message", { username, text: message });
+      socket.to(roomId).emit("chat-message", { username, text: message, isHost });
     });
 
     // 4. Dừng Livestream

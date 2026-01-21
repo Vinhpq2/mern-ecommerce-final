@@ -4,19 +4,19 @@ const userSchema = new mongoose.Schema(
     {
     name:{
         type:String,
-        required:[true," Phải nhập tên"]
+        required:[true,"nameRequired"]
     },
     email:{
         type:String,
-        required:[true," Phải nhập email"],
+        required:[true,"emailRequired"],
         unique:true,
         lowercase:true,
         trim:true
     },
     password:{
         type:String,
-        required:[true," Phải nhập mật khẩu"],
-        minlength:[6," Mật khẩu phải có ít nhất 6 ký tự"],
+        required:[true,"passwordRequired"],
+        minlength:[6,"passwordTooShort"],
     },
     cartItems:[
         {
@@ -27,6 +27,10 @@ const userSchema = new mongoose.Schema(
             product:{
                 type:mongoose.Schema.Types.ObjectId,
                 ref:"Product",
+            },
+            size: {
+                type: String,
+                required: false // Không bắt buộc vì có sản phẩm không có size
             }
             }
     ],

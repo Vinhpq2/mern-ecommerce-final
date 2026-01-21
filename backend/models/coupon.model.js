@@ -12,9 +12,9 @@ const couponSchema = new mongoose.Schema({
         min:0,
         max:100,
     },
-    exprirationDate:{
-    type:Date,
-    requird:true,
+    expirationDate:{
+        type:Date,
+        required:true,
     },
     isActive:{
         type:Boolean,
@@ -25,6 +25,14 @@ const couponSchema = new mongoose.Schema({
         ref:"User",
         required:true,
         unique:true,
+    },
+    usageLimit: {
+        type: Number,
+        default: null,
+    },
+    usageCount: {
+        type: Number,
+        default: 0,
     },
 },{
     timestamps:true,
