@@ -71,3 +71,26 @@ export const createLivestreamCoupon = async (req, res) => {
 		res.status(500).json({ message: "Server error", error: error.message });
 	}
 };
+
+export const getAllCoupons = async (req, res) => {
+	try {
+		const coupons = await Coupon.find({});
+		res.json(coupons);
+	} catch (error) {
+		console.log("Error in getAllCoupons controller", error.message);
+		res.status(500).json({ message: "Server error", error: error.message });
+	}
+};
+
+export const deleteCoupon = async (req, res) => {
+	try {
+		const coupon = await Coupon.findByIdAndDelete(req.params.id);
+		if (!coupon) {
+			return res.status(404).json({ message: "Coupon not found" });
+		}
+		res.json({ message: "Coupon deleted successfully" });
+	} catch (error) {
+		console.log("Error in deleteCoupon controller", error.message);
+		res.status(500).json({ message: "Server error", error: error.message });
+	}
+};

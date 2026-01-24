@@ -35,7 +35,8 @@ export const initializeSocket = (httpServer) => {
 
       // Cập nhật số lượng người xem
       const room = io.sockets.adapter.rooms.get(roomId);
-      const viewerCount = room ? room.size : 0;
+      // Trừ 1 vì tính cả Host trong room (Host + Viewers)
+      const viewerCount = room ? Math.max(0, room.size - 1) : 0;
       io.to(roomId).emit("viewer-update", viewerCount);
 
       // Nếu phòng này đang Live, báo ngay cho người mới vào biết
@@ -55,6 +56,19 @@ export const initializeSocket = (httpServer) => {
       activeStreams.delete(roomId); // Xóa khỏi danh sách Live
       // Chỉ gửi sự kiện dừng cho phòng cụ thể
       socket.to(roomId).emit("stream-ended");
+    });
+
+    // Xử lý khi người dùng thoát (tắt tab hoặc mất mạng) để giảm view
+    socket.on("disconnecting", () => {
+      for (const roomId of socket.rooms) {
+        if (roomId !== socket.id) {
+          const room = io.sockets.adapter.rooms.get(roomId);
+          const currentSize = room ? room.size : 0;
+          // Khi disconnect, socket vẫn còn trong room.size nên ta trừ 1 (người đang out) và trừ 1 (Host)
+          const viewerCount = Math.max(0, currentSize - 2);
+          socket.to(roomId).emit("viewer-update", viewerCount);
+        }
+      }
     });
 
     socket.on("disconnect", () => {
