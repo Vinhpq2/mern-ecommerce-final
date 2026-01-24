@@ -104,6 +104,7 @@ export const languages: { [lang: string]: {
     currentPasswordIncorrect:string;
     updateSuccess:string;
     updateFailed:string;
+    coupons:string;
 } } = {
   en: {
     home:"Home",
@@ -211,6 +212,7 @@ export const languages: { [lang: string]: {
     currentPasswordIncorrect:"Current password incorrect",
     updateSuccess:"Profile updated successfully",
     updateFailed:"Update failed",
+    coupons:"Coupons",
   },
   vi: {
     home:"Trang chủ",
@@ -318,5 +320,6 @@ export const languages: { [lang: string]: {
     currentPasswordIncorrect:"Mật khẩu hiện tại không đúng",
     updateSuccess:"Cập nhật thông tin thành công",
     updateFailed:"Cập nhật thất bại",
+    coupons:"Mã giảm giá",
   },
 };

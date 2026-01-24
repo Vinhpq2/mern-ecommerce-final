@@ -65,6 +65,7 @@ function App() {
         <Route path="/video-list" element ={user ? <VideoListPage/> : <Navigate to ="/login"/>} />
         <Route path='/product/:id' element={<ProductInfo />} />
         <Route path="/livestream" element={<ProtectedFaceAuthRoute><Livestream /></ProtectedFaceAuthRoute>} />
+        <Route path="/live" element={user ? <Livestream /> : <Navigate to="/login" />} />
         <Route path="/viewer" element={user ? <Viewer /> : <Navigate to="/login" />} />
         <Route path="/live/:id" element={user ? <Viewer /> : <Navigate to="/login" />} />
         <Route path='*' element={<NotFoundPage />} />

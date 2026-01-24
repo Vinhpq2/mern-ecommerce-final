@@ -131,7 +131,10 @@ const CameraAuthentication = () => {
           console.log("Camera exited");
           stopAllCameras();
           setIsCameraOpen(false);
-          navigate("/");
+          // Chỉ quay về trang chủ nếu chưa xác thực thành công (tránh xung đột khi xác thực xong)
+          if (sessionStorage.getItem("isFaceAuthenticated") !== "true") {
+            navigate("/");
+          }
         },
 
         location: true,
@@ -144,11 +147,19 @@ const CameraAuthentication = () => {
       (res, location) => {
         console.log("✅ Result:", res);
         console.log("📍 Location:", location);
-        stopAllCameras();
-        setIsCameraOpen(false);
         sessionStorage.setItem("isFaceAuthenticated", "true");
-        // Dùng window.location.href để reload trang, giúp xóa sạch overlay của camera
-        window.location.href = "/livestream";
+        
+        try {
+          stopAllCameras();
+          setIsCameraOpen(false);
+        } catch (e) {
+          console.error("Error stopping camera:", e);
+        }
+
+        // Chuyển trang ngay lập tức
+        setTimeout(() => {
+  navigate("/livestream", { replace: true });
+}, 100);
       }
     );
   }
